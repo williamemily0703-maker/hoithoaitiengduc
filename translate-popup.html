@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Popup dịch giọng nói</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; text-align: center; }
+    button { padding: 10px 20px; margin: 10px; font-size: 16px; }
+    #transcript { margin-top: 20px; font-size: 18px; }
+  </style>
+</head>
+<body>
+  <h1>🎤 Nói tiếng Đức</h1>
+  <button id="start-btn">🎙️ Bắt đầu nói</button>
+  <div id="transcript"></div>
+
+  <script>
+    const startBtn = document.getElementById('start-btn');
+    const transcriptDiv = document.getElementById('transcript');
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let recognition;
+
+    if (SpeechRecognition) {
+      recognition = new SpeechRecognition();
+      recognition.lang = 'de-DE';
+      recognition.interimResults = false;
+      recognition.continuous = false;
+    } else {
+      alert('Trình duyệt không hỗ trợ Web Speech API');
+    }
+
+    startBtn.addEventListener('click', () => {
+      transcriptDiv.innerText = 'Đang nghe...';
+      recognition.start();
+    });
+
+    recognition.onresult = async (event) => {
+      const transcript = event.results[0][0].transcript;
+      transcriptDiv.innerText = `Đã nhận: ${transcript}`;
+
+      const translated = await translateText(transcript, 'de', 'vi');
+      transcriptDiv.innerText = `Đã nhận: ${transcript}\nDịch: ${translated}`;
+
+      // Gửi transcript tiếng Đức về trang chính
+      window.opener.postMessage({ transcript }, '*');
+      window.close();
+    };
+
+    recognition.onerror = (e) => {
+      transcriptDiv.innerText = `Lỗi: ${e.error}`;
+    };
+
+    async function translateText(text, from, to) {
+      const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${encodeURIComponent(text)}`);
+      const data = await res.json();
+      return data[0].map(x => x[0]).join('');
+    }
+  </script>
+</body>
+</html>
