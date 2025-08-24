@@ -11,7 +11,7 @@
             color: #1c1e21;
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* Align top */
+            align-items: flex-start;
             min-height: 100vh;
             margin: 0;
             padding: 20px;
@@ -26,58 +26,18 @@
             padding: 30px;
             text-align: center;
         }
-        h1 {
-            color: #0d6efd;
-            margin-bottom: 25px;
-        }
-        h2 {
-            font-size: 1.2rem;
-            color: #495057;
-            margin-bottom: 10px;
-            text-align: left;
-            border-bottom: 1px solid #dee2e6;
-            padding-bottom: 5px;
-        }
+        h1 { color: #0d6efd; margin-bottom: 25px; }
+        h2 { font-size: 1.2rem; color: #495057; margin-bottom: 10px; text-align: left; border-bottom: 1px solid #dee2e6; padding-bottom: 5px; }
         textarea {
-            width: 100%;
-            box-sizing: border-box;
-            padding: 12px;
-            border: 1px solid #ced4da;
-            border-radius: 8px;
-            font-size: 1rem;
-            margin-bottom: 10px;
-            resize: vertical;
-        }
-        .controls, .session-controls {
-            margin: 15px 0;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 12px;
+            width: 100%; box-sizing: border-box; padding: 12px; border: 1px solid #ced4da; border-radius: 8px;
+            font-size: 1rem; margin-bottom: 10px; resize: vertical;
         }
         button {
-            background-color: #0d6efd;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            background-color: #0d6efd; color: white; border: none; padding: 12px 24px; border-radius: 8px;
+            font-size: 1rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        button:hover {
-            background-color: #0b5ed7;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        }
-        button:disabled {
-            background-color: #6c757d;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
+        button:hover { background-color: #0b5ed7; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
         button#record-btn { background-color: #198754; }
         button#record-btn:hover { background-color: #157347; }
         .dialogue-box { margin-top: 20px; padding: 15px; background-color: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; text-align: left; }
@@ -87,106 +47,10 @@
         .status { margin-top: 20px; font-size: 1.1rem; font-weight: bold; min-height: 50px; padding: 10px; border-radius: 8px;}
         .status.success { color: #146c43; background-color: #d1e7dd; }
         .status.error { color: #b02a37; background-color: #f8d7da; }
-        .instructions { font-size: 0.9rem; color: #606770; text-align: left; margin-bottom: 20px; background: #eef; padding: 15px; border-radius: 8px; border-left: 4px solid #0d6efd; }
-        #review-area { text-align: left; margin-top: 20px; }
-        .review-line { padding: 12px; margin: 8px 0; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
-        .review-line.computer { background-color: #e7f3ff; }
-        .review-line.user { background-color: #d1e7dd; font-weight: 500;}
-        .play-recording-btn { background-color: #fd7e14; padding: 6px 12px; font-size: 0.9rem; }
-        .play-recording-btn:hover { background-color: #e46e0e; }
-        #play-all-btn { background-color: #0dcaf0; }
-        #play-all-btn:hover { background-color: #0aa8c2; }
-        .settings-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-            text-align: left;
-        }
-        .difficulty-selection, .custom-feedback-area {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #dee2e6;
-        }
-        .difficulty-selection fieldset {
-            border: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            justify-content: space-around;
-        }
-        .difficulty-selection legend {
-            font-weight: bold;
-            margin-bottom: 10px;
-            width: 100%;
-        }
-        .feedback-box {
-            font-size: 1rem;
-            font-weight: normal;
-            margin-top: 10px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #f8f9fa;
-            text-align: left;
-            line-height: 1.7;
-        }
-        .diff-correct { color: #000; }
-        .diff-incorrect { color: #dc3545; text-decoration: underline; font-weight: bold; }
-        .diff-missing { color: #6c757d; font-style: italic; }
-        #audio-canvas {
-            display: block;
-            width: 100%;
-            height: 60px;
-            background-color: #f0f2f5;
-            border-radius: 8px;
-            margin: 15px 0;
-        }
         #score-area {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: #ffc107;
-            color: #333;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-size: 1.2rem;
-            font-weight: bold;
+            position: fixed; top: 20px; right: 20px; background-color: #ffc107; color: #333;
+            padding: 10px 20px; border-radius: 20px; font-size: 1.2rem; font-weight: bold;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-        .auto-record-toggle {
-            margin-top: 10px;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        /* CSS CHO PHẦN TẢI HỘI THOẠI */
-        #danh-sach-hoi-thoai {
-            text-align: left;
-            margin-bottom: 25px;
-            padding: 20px;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            border: 1px solid #dee2e6;
-        }
-        #danh-sach-hoi-thoai h2 {
-            margin-top: 0;
-            border-bottom: none;
-            font-size: 1.1rem;
-        }
-        .file-button {
-            background-color: #0d6efd;
-            margin: 5px;
-            padding: 8px 15px;
-            font-size: 0.9rem;
-            text-transform: capitalize;
-        }
-        .file-button:hover {
-            background-color: #0b5ed7;
         }
     </style>
 </head>
@@ -194,703 +58,118 @@
     <div id="score-area">Điểm: 100</div>
     <div class="container">
         <h1>Luyện Giao Tiếp Chuyên Nghiệp 🚀</h1>
-        
-        <div id="danh-sach-hoi-thoai"></div>
-        
-        <div id="initial-setup">
-            <div class="instructions">
-                <strong>Hướng dẫn:</strong>
-                <ol>
-                    <li>Chọn một hội thoại có sẵn ở trên hoặc dán hội thoại của bạn vào ô bên dưới.</li>
-                    <li>Chọn độ khó và các tùy chỉnh khác.</li>
-                    <li>Nhấn <strong>"Bắt Đầu Luyện Tập"</strong>.</li>
-                    <li>Nếu "Tự động ghi âm" được bật, ứng dụng sẽ tự bắt đầu nghe sau khi máy nói xong.</li>
-                    <li>Nếu không, bạn cần nhấn nút "Bắt Đầu Ghi Âm".</li>
-                </ol>
-            </div>
 
-            <div class="settings-grid">
-                <div class="difficulty-selection">
-                    <fieldset>
-                        <legend>Chọn Độ Khó</legend>
-                        <div><input type="radio" id="easy" name="difficulty" value="80" checked> <label for="easy">Dễ (80%)</label></div>
-                        <div><input type="radio" id="medium" name="difficulty" value="90"> <label for="medium">TB (90%)</label></div>
-                        <div><input type="radio" id="hard" name="difficulty" value="100"> <label for="hard">Khó (100%)</label></div>
-                    </fieldset>
-                    <div class="auto-record-toggle">
-                        <input type="checkbox" id="auto-record" checked>
-                        <label for="auto-record">Tự động ghi âm</label>
-                    </div>
-                </div>
-                <div class="custom-feedback-area">
-                    <textarea id="rewards-input" rows="3" placeholder="Phần thưởng (mỗi dòng một câu)...&#10;Làm tốt lắm!&#10;Phát âm chuẩn!">Làm tốt lắm!&#10;Phát âm chuẩn!&#10;Tuyệt vời!&#10;Bạn thật siêu!</textarea>
-                    <textarea id="penalties-input" rows="3" placeholder="Hình phạt (mỗi dòng một câu)...&#10;Cố lên nào!&#10;Thử lại lần nữa nhé.">Cố lên nào!&#10;Thử lại lần nữa nhé.&#10;Đừng nản lòng.&#10;Sắp được rồi!</textarea>
-                </div>
-            </div>
-
-            <div class="settings-grid" style="margin-top: 15px;">
-                <div class="custom-feedback-area">
-                    <label for="success-audio">Âm thanh khi thành công (.mp3):</label>
-                    <input type="file" id="success-audio" accept=".mp3">
-                </div>
-                <div class="custom-feedback-area">
-                    <label for="failure-audio">Âm thanh khi thất bại (.mp3):</label>
-                    <input type="file" id="failure-audio" accept=".mp3">
-                </div>
-            </div>
-
-            <textarea id="dialogue-input" rows="6" placeholder="Dán hội thoại của bạn ở đây...&#10;Ví dụ:&#10;A: Hallo, wie geht's?&#10;B: Mir geht's gut, danke."></textarea>
-            
-            <div class="controls">
-                <button id="load-btn">🚀 Bắt Đầu Luyện Tập</button>
-                <button id="swap-roles-btn">🔁 Đổi Vai (Hiện tại: Bạn là B)</button>
-            </div>
+        <textarea id="dialogue-input" rows="6" placeholder="Dán hội thoại ở đây...&#10;Ví dụ:&#10;A: Hallo, wie geht's?&#10;B: Mir geht's gut, danke."></textarea>
+        <div class="controls">
+            <button id="load-btn">🚀 Bắt Đầu Luyện Tập</button>
         </div>
 
-        <div id="practice-area" class="dialogue-box" style="display: none;">
+        <div id="practice-area" class="dialogue-box" style="display:none;">
             <h2>Lời thoại của máy:</h2>
             <div id="computer-line" class="line computer-line">...</div>
             <div id="user-line-container">
-                 <h2 id="user-line-title">Câu của bạn:</h2>
-                 <div id="user-line" class="line user-line" style="display: none;">...</div>
+                <h2>Câu của bạn:</h2>
+                <div id="user-line" class="line user-line">...</div>
             </div>
         </div>
-        
-        <div id="status-area" class="status"></div>
-        
-        <div id="interim-transcript-area" class="feedback-box" style="display: none; margin-top: 15px; min-height: 50px; font-style: italic; color: #6c757d;"></div>
-        
-        <canvas id="audio-canvas" style="display: none;"></canvas>
 
-        <div id="session-controls-area" style="display: none;">
-            <div class="session-controls">
-                <button id="record-btn" disabled>🎤 Bắt Đầu Ghi Âm</button>
-                <button id="toggle-line-btn" disabled>🙈 Hiện Lời Thoại</button>
-            </div>
-        </div>
-        
-        <div id="review-area" style="display: none;">
-            <h2>Xem Lại Hội Thoại</h2>
-            <div id="review-content"></div>
-            <div class="controls" style="margin-top: 20px;">
-                <button id="play-all-btn">▶️ Nghe lại toàn bộ</button>
-                <button id="restart-session-btn">🔁 Luyện tập lại hội thoại này</button>
-                <button id="choose-new-btn" style="background-color: #6c757d;">🏠 Chọn hội thoại khác</button>
-            </div>
+        <div id="status-area" class="status"></div>
+        <div class="session-controls" style="margin-top:15px;">
+            <button id="record-btn" disabled>🎤 Bắt Đầu Nói</button>
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // --- BẮT ĐẦU PHẦN TẢI HỘI THOẠI TỪ GITHUB ---
-            const owner = 'truongkhaai136-dot';
-            const repo = 'webtiengduc';
-            const baseFolderPath = 'hoi-thoai';
-            const conversationContainer = document.getElementById('danh-sach-hoi-thoai');
-            const dialogueInput = document.getElementById('dialogue-input'); 
+    document.addEventListener('DOMContentLoaded', function() {
+        const loadBtn = document.getElementById('load-btn');
+        const recordBtn = document.getElementById('record-btn');
+        const dialogueInput = document.getElementById('dialogue-input');
+        const computerLine = document.getElementById('computer-line');
+        const userLine = document.getElementById('user-line');
+        const statusArea = document.getElementById('status-area');
+        const scoreArea = document.getElementById('score-area');
 
-            let fileList = [];
+        let linesA = [], linesB = [], currentLineIndex = 0;
+        let score = 100;
+        let userIsB = true;
 
-            function loadFileContent(downloadUrl, buttonElement) {
-                document.querySelectorAll('.file-button').forEach(btn => btn.disabled = true);
-                buttonElement.textContent = 'Đang tải...';
-
-                fetch(downloadUrl)
-                    .then(response => response.text())
-                    .then(content => {
-                        dialogueInput.value = content;
-                        dialogueInput.focus();
-                        dialogueInput.scrollTop = 0;
-                        
-                        buttonElement.textContent = 'Đã tải thành công!';
-                        buttonElement.style.backgroundColor = '#198754';
-                        
-                        setTimeout(() => {
-                            document.querySelectorAll('.file-button').forEach(btn => {
-                                btn.disabled = false;
-                                btn.textContent = btn.dataset.filename;
-                                btn.style.backgroundColor = '#0d6efd';
-                            });
-                        }, 1500);
-                    })
-                    .catch(error => {
-                        console.error('Lỗi khi tải nội dung file:', error);
-                        buttonElement.textContent = 'Tải lỗi!';
-                        buttonElement.style.backgroundColor = '#dc3545';
-                    });
-            }
-            
-            function renderFileList() {
-                if (!conversationContainer) return;
-                conversationContainer.innerHTML = '<h2>Chọn một hội thoại để bắt đầu:</h2>';
-                
-                fileList.sort((a, b) => a.path.localeCompare(b.path));
-
-                fileList.forEach(file => {
-                    const button = document.createElement('button');
-                    const prettyName = file.path
-                        .replace(baseFolderPath + '/', '')
-                        .replace('.txt', '')
-                        .replace(/\//g, ' / ')
-                        .replace(/_/g, ' ')
-                        .replace(/-/g, ' ');
-                    
-                    button.textContent = prettyName;
-                    button.dataset.filename = prettyName;
-                    button.title = `Tải hội thoại: ${prettyName}`;
-                    button.classList.add('file-button');
-                    
-                    button.addEventListener('click', () => {
-                        loadFileContent(file.download_url, button);
-                    });
-                    
-                    conversationContainer.appendChild(button);
-                });
-            }
-
-            async function fetchAllFiles(path) {
-                const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-                try {
-                    const response = await fetch(apiUrl);
-                    if (!response.ok) throw new Error(`Lỗi mạng khi truy cập ${path}`);
-                    const items = await response.json();
-
-                    const promises = items.map(async (item) => {
-                        if (item.type === 'dir') {
-                            await fetchAllFiles(item.path);
-                        } else if (item.type === 'file' && item.name.endsWith('.txt')) {
-                            fileList.push({
-                                path: item.path,
-                                download_url: item.download_url
-                            });
-                        }
-                    });
-
-                    await Promise.all(promises);
-                } catch (error) {
-                    console.error(error);
-                    if(conversationContainer) {
-                        conversationContainer.innerHTML = `<p style="color: red;">Lỗi: Không thể tải danh sách hội thoại từ GitHub.</p>`;
-                    }
-                }
-            }
-
-            if (conversationContainer && dialogueInput) {
-                fetchAllFiles(baseFolderPath).then(() => {
-                    renderFileList();
-                });
-            }
-            // --- KẾT THÚC PHẦN TẢI HỘI THOẠI ---
-
-
-            // --- BẮT ĐẦU PHẦN LUYỆN NÓI CỦA BẠN ---
-            // --- 1. Lấy các phần tử HTML ---
-            const loadBtn = document.getElementById('load-btn');
-            const swapRolesBtn = document.getElementById('swap-roles-btn');
-            const toggleBtn = document.getElementById('toggle-line-btn');
-            const recordBtn = document.getElementById('record-btn');
-            const practiceArea = document.getElementById('practice-area');
-            const computerLine = document.getElementById('computer-line');
-            const userLine = document.getElementById('user-line');
-            const userLineTitle = document.getElementById('user-line-title');
-            const statusArea = document.getElementById('status-area');
-            const initialSetup = document.getElementById('initial-setup');
-            const sessionControlsArea = document.getElementById('session-controls-area');
-            const reviewArea = document.getElementById('review-area');
-            const reviewContent = document.getElementById('review-content');
-            const playAllBtn = document.getElementById('play-all-btn');
-            const restartSessionBtn = document.getElementById('restart-session-btn');
-            const chooseNewBtn = document.getElementById('choose-new-btn');
-            const rewardsInput = document.getElementById('rewards-input');
-            const penaltiesInput = document.getElementById('penalties-input');
-            const scoreArea = document.getElementById('score-area');
-            const canvas = document.getElementById('audio-canvas');
-            const canvasCtx = canvas.getContext('2d');
-            const autoRecordCheckbox = document.getElementById('auto-record');
-            const interimTranscriptArea = document.getElementById('interim-transcript-area');
-            const successAudioInput = document.getElementById('success-audio');
-            const failureAudioInput = document.getElementById('failure-audio');
-
-            // --- 2. Khởi tạo Web API & Biến trạng thái ---
-            // --- THAY PHẦN SpeechRecognition BẰNG PHẦN NÀY ---
-function openTranslatePopup() {
-    const popup = window.open(
-        "translate-popup.html",
-        "translatePopup",
-        "width=500,height=400"
-    );
-
-    // Chỉ nghe một lần từ popup
-    window.addEventListener("message", (event) => {
-        if (event.data && event.data.transcript) {
-            const spokenText = event.data.transcript.trim();
-            console.log("Nhận từ popup:", spokenText);
-            processFinalResult(spokenText); // Chấm điểm như cũ
+        // Hàm tính độ chính xác
+        function calcAccuracy(original, spoken) {
+            const clean = str => str.toLowerCase().replace(/[^\w\säöüß]/g, "").split(/\s+/).filter(Boolean);
+            const origWords = clean(original);
+            const spokenWords = clean(spoken);
+            const correct = spokenWords.filter(w => origWords.includes(w)).length;
+            return Math.round((correct / origWords.length) * 100);
         }
-    }, { once: true });
-}
 
-// Ghi đè lại nút ghi âm
-recordBtn.addEventListener('click', () => {
-    openTranslatePopup();
-});
-            function loadVoices() { voices = synthesis.getVoices(); }
-            loadVoices();
-            if (synthesis.onvoiceschanged !== undefined) { synthesis.onvoiceschanged = loadVoices; }
-
-            // --- 3. Các hàm chức năng ---
-            function speak(text, onEndCallback) {
-                if (synthesis.speaking) { synthesis.cancel(); }
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.voice = voices.find(voice => voice.name === 'Microsoft Amala Online (Natural) - German (Germany)') || voices.find(voice => voice.lang === 'de-DE');
-                utterance.onend = () => onEndCallback && onEndCallback();
-                synthesis.speak(utterance);
+        // Chấm điểm khi nhận transcript
+        function processFinalResult(spokenText) {
+            const targetText = userIsB ? linesB[currentLineIndex] : linesA[currentLineIndex];
+            const accuracy = calcAccuracy(targetText, spokenText);
+            if (accuracy >= 80) {
+                statusArea.className = "status success";
+                statusArea.innerText = `👍 Đúng ${accuracy}%!`;
+                currentLineIndex++;
+                nextTurn();
+            } else {
+                statusArea.className = "status error";
+                statusArea.innerText = `😥 Chỉ ${accuracy}%. Thử lại nhé!`;
+                score -= 5;
+                scoreArea.innerText = `Điểm: ${score}`;
             }
+        }
 
-            function playAudioPromise(url) {
-                return new Promise((resolve, reject) => {
-                    if (!url) { resolve(); return; }
-                    const audio = new Audio(url);
-                    audio.onended = resolve;
-                    audio.onerror = reject;
-                    audio.play();
-                });
-            }
-
-            function lcs(seq1, seq2) {
-                const m = seq1.length, n = seq2.length;
-                const dp = Array(m + 1).fill(null).map(() => Array(n + 1).fill(0));
-                for (let i = 1; i <= m; i++) {
-                    for (let j = 1; j <= n; j++) {
-                        if (seq1[i - 1] === seq2[j - 1]) {
-                            dp[i][j] = dp[i - 1][j - 1] + 1;
-                        } else {
-                            dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
-                        }
-                    }
-                }
-                let i = m, j = n;
-                const result = [];
-                while (i > 0 && j > 0) {
-                    if (seq1[i - 1] === seq2[j - 1]) {
-                        result.unshift(seq1[i - 1]);
-                        i--; j--;
-                    } else if (dp[i - 1][j] > dp[i][j - 1]) { i--; } 
-                    else { j--; }
-                }
-                return result;
-            }
-
-            function createDiffHtml(originalText, spokenText) {
-                const clean = (text) => text.toLowerCase().replace(/[^\w\s'äöüß]/g, "").split(/\s+/).filter(Boolean);
-                const originalWords = clean(originalText);
-                const spokenWords = clean(spokenText);
-                const commonSubsequence = new Set(lcs(originalWords, spokenWords));
-                let correctWords = 0;
-                const spokenHtml = spokenWords.map(word => {
-                    if (commonSubsequence.has(word)) {
-                        correctWords++;
-                        return `<span class="diff-correct">${word}</span>`;
-                    } else {
-                        return `<span class="diff-incorrect">${word}</span>`;
-                    }
-                }).join(' ');
-                const originalHtml = originalWords.map(word => {
-                    if (commonSubsequence.has(word)) {
-                        return `<span class="diff-correct">${word}</span>`;
-                    } else {
-                        return `<span class="diff-missing">${word}</span>`;
-                    }
-                }).join(' ');
-                const accuracy = originalWords.length > 0 ? Math.round((correctWords / originalWords.length) * 100) : 0;
-                return {
-                    html: `<div><strong>Câu thoại gốc:</strong> ${originalHtml}</div><div><strong>Bạn đã nói:</strong> ${spokenHtml}</div>`,
-                    accuracy: accuracy
-                };
-            }
-
-            function updateDialogueDisplay() {
-                const computerRole = userIsB ? 'A' : 'B';
-                const userRole = userIsB ? 'B' : 'A';
-                const computerText = userIsB ? linesA[currentLineIndex] : linesB[currentLineIndex];
-                const userText = userIsB ? linesB[currentLineIndex] : linesA[currentLineIndex];
-                computerLine.textContent = `${computerRole} (Máy): ${computerText || '...'}`;
-                userLine.textContent = userText || '...';
-                userLineTitle.textContent = `Câu của bạn (${userRole}):`;
-                userLine.style.display = isUserLineVisible ? 'block' : 'none';
-                toggleBtn.textContent = isUserLineVisible ? '🙉 Ẩn Lời Thoại' : '🙈 Hiện Lời Thoại';
-                swapRolesBtn.textContent = `🔁 Đổi Vai (Hiện tại: Bạn là ${userRole})`;
-            }
-
-            function startPractice() {
-                currentLineIndex = 0;
-                userRecordings = [];
-                score = 100;
-                updateScoreDisplay();
-                statusArea.innerHTML = '';
-                statusArea.className = 'status';
-                initialSetup.style.display = 'none';
-                reviewArea.style.display = 'none';
-                practiceArea.style.display = 'block';
-                sessionControlsArea.style.display = 'block';
-                canvas.style.display = 'block';
-                [toggleBtn].forEach(b => b.disabled = false);
-                updateDialogueDisplay();
+        function nextTurn() {
+            const conversationLength = Math.max(linesA.length, linesB.length);
+            if (currentLineIndex >= conversationLength) {
+                statusArea.className = "status success";
+                statusArea.innerText = `🎉 Hoàn thành hội thoại! Điểm: ${score}`;
                 recordBtn.disabled = true;
-                recordBtn.textContent = '...';
+                return;
+            }
+            const compText = userIsB ? linesA[currentLineIndex] : linesB[currentLineIndex];
+            const usrText = userIsB ? linesB[currentLineIndex] : linesA[currentLineIndex];
+            computerLine.innerText = compText || "...";
+            userLine.innerText = usrText || "...";
+            recordBtn.disabled = false;
+            statusArea.innerText = "Đến lượt bạn nói...";
+        }
 
-                if (userIsB) {
-                    if(linesA[0]) speak(linesA[0], handleNextTurn); else handleNextTurn();
-                } else {
-                    statusArea.textContent = 'Đến lượt bạn (Vai A).';
-                    computerLine.textContent = `B (Máy): ...chờ bạn nói...`;
-                    handleNextTurn();
+        function openTranslatePopup() {
+            const popup = window.open(
+                "translate-popup.html",
+                "translatePopup",
+                "width=500,height=400"
+            );
+            window.addEventListener("message", (event) => {
+                if (event.data && event.data.transcript) {
+                    const spoken = event.data.transcript.trim();
+                    processFinalResult(spoken);
                 }
-            }
-            
-            function showReview() {
-                practiceArea.style.display = 'none';
-                sessionControlsArea.style.display = 'none';
-                canvas.style.display = 'none';
-                if (score >= 80) {
-                    const rewardMsg = getRandomItem(rewardsInput.value) || "Chúc mừng!";
-                    statusArea.innerHTML = `🎉 ${rewardMsg} Bạn đã hoàn thành với số điểm ${score}!`;
-                    statusArea.className = 'status success';
-                } else {
-                    const penaltyMsg = getRandomItem(penaltiesInput.value) || "Cố gắng hơn nhé!";
-                    statusArea.innerHTML = `🤔 ${penaltyMsg} Bạn chỉ đạt ${score} điểm. Luyện tập thêm nhé!`;
-                    statusArea.className = 'status error';
-                }
-                reviewArea.style.display = 'block';
-                reviewContent.innerHTML = '';
-                const userRole = userIsB ? 'B' : 'A';
-                const createPlayHandler = index => () => {
-                    const audioBlob = userRecordings[index];
-                    if (audioBlob) { const audioUrl = URL.createObjectURL(audioBlob); new Audio(audioUrl).play(); }
-                };
-                for (let i = 0; i < Math.max(linesA.length, linesB.length); i++) {
-                    if (linesA[i]) {
-                        const lineA = document.createElement('div'); lineA.classList.add('review-line');
-                        if (userRole === 'A') {
-                            lineA.classList.add('user'); const text = document.createElement('span'); text.textContent = `A (Bạn): ${linesA[i]}`;
-                            const playBtn = document.createElement('button'); playBtn.textContent = '▶️'; playBtn.classList.add('play-recording-btn');
-                            playBtn.onclick = createPlayHandler(i); lineA.appendChild(text); lineA.appendChild(playBtn);
-                        } else { lineA.classList.add('computer'); lineA.textContent = `A (Máy): ${linesA[i]}`; }
-                        reviewContent.appendChild(lineA);
-                    }
-                    if (linesB[i]) {
-                        const lineB = document.createElement('div'); lineB.classList.add('review-line');
-                        if (userRole === 'B') {
-                            lineB.classList.add('user'); const text = document.createElement('span'); text.textContent = `B (Bạn): ${linesB[i]}`;
-                            const playBtn = document.createElement('button'); playBtn.textContent = '▶️'; playBtn.classList.add('play-recording-btn');
-                            playBtn.onclick = createPlayHandler(i); lineB.appendChild(text); lineB.appendChild(playBtn);
-                        } else { lineB.classList.add('computer'); lineB.textContent = `B (Máy): ${linesB[i]}`; }
-                        reviewContent.appendChild(lineB);
-                    }
-                }
-            }
+            }, { once: true });
+        }
 
-            function updateScoreDisplay() { scoreArea.textContent = `Điểm: ${score}`; }
-            function getRandomItem(list) {
-                const items = list.split('\n').filter(item => item.trim() !== '');
-                if (items.length === 0) return '';
-                return items[Math.floor(Math.random() * items.length)];
-            }
+        recordBtn.addEventListener('click', openTranslatePopup);
 
-            function setupAudioVisualizer(stream) {
-                if (!audioContext) { audioContext = new (window.AudioContext || window.webkitAudioContext)(); }
-                source = audioContext.createMediaStreamSource(stream);
-                analyser = audioContext.createAnalyser();
-                analyser.fftSize = 2048;
-                source.connect(analyser);
-                drawWaveform();
-            }
-
-            function drawWaveform() {
-                animationFrameId = requestAnimationFrame(drawWaveform);
-                const bufferLength = analyser.frequencyBinCount;
-                const dataArray = new Uint8Array(bufferLength);
-                analyser.getByteTimeDomainData(dataArray);
-                canvasCtx.fillStyle = '#f0f2f5';
-                canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
-                canvasCtx.lineWidth = 2;
-                canvasCtx.strokeStyle = '#0d6efd';
-                canvasCtx.beginPath();
-                const sliceWidth = canvas.width * 1.0 / bufferLength;
-                let x = 0;
-                for (let i = 0; i < bufferLength; i++) {
-                    const v = dataArray[i] / 128.0;
-                    const y = v * canvas.height / 2;
-                    if (i === 0) { canvasCtx.moveTo(x, y); } else { canvasCtx.lineTo(x, y); }
-                    x += sliceWidth;
-                }
-                canvasCtx.lineTo(canvas.width, canvas.height / 2);
-                canvasCtx.stroke();
-            }
-
-            function stopDrawing() {
-                if (animationFrameId) {
-                    cancelAnimationFrame(animationFrameId);
-                    animationFrameId = null;
-                }
-                canvasCtx.fillStyle = '#f0f2f5';
-                canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
-            }
-            
-            // --- 4. Gắn các sự kiện ---
-            loadBtn.addEventListener('click', () => {
-                const fullText = dialogueInput.value.trim(); if (fullText === '') { alert('Vui lòng nhập đoạn hội thoại!'); return; }
-                const lines = fullText.split('\n').filter(line => line.trim() !== ''); linesA = []; linesB = [];
-                lines.forEach(line => {
-                    if (line.toLowerCase().startsWith('a:')) linesA.push(line.substring(2).trim());
-                    else if (line.toLowerCase().startsWith('b:')) linesB.push(line.substring(2).trim());
-                });
-                if (linesA.length === 0 && linesB.length === 0) { alert('Lỗi: Không tìm thấy câu thoại nào hợp lệ (bắt đầu bằng "A:" hoặc "B:")'); return; }
-                startPractice();
+        loadBtn.addEventListener('click', () => {
+            const fullText = dialogueInput.value.trim();
+            if (!fullText) { alert("Vui lòng nhập đoạn hội thoại!"); return; }
+            linesA = []; linesB = [];
+            fullText.split("\n").forEach(line => {
+                if (line.toLowerCase().startsWith("a:")) linesA.push(line.substring(2).trim());
+                if (line.toLowerCase().startsWith("b:")) linesB.push(line.substring(2).trim());
             });
-
-            swapRolesBtn.addEventListener('click', () => { 
-                userIsB = !userIsB; 
-                if (linesA.length > 0 || linesB.length > 0) { startPractice(); } 
-                else { updateDialogueDisplay(); } 
-            });
-
-            toggleBtn.addEventListener('click', () => { 
-                isUserLineVisible = !isUserLineVisible; 
-                userLine.style.display = isUserLineVisible ? 'block' : 'none'; 
-                toggleBtn.textContent = isUserLineVisible ? '🙉 Ẩn Lời Thoại' : '🙈 Hiện Lời Thoại'; 
-            });
-
-            function startRecording() {
-                if (currentFailureAudio) { currentFailureAudio.pause(); currentFailureAudio.currentTime = 0; currentFailureAudio = null; }
-                if (isRecording) return; 
-                isRecording = true;
-                final_transcript = '';
-                interimTranscriptArea.textContent = 'Đang nghe...';
-                interimTranscriptArea.style.display = 'block';
-                recordBtn.disabled = true;
-                recordBtn.textContent = '🔴 Đang ghi âm...';
-                statusArea.textContent = 'Bắt đầu ghi âm... 🎤';
-                statusArea.className = 'status';
-                navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-                    setupAudioVisualizer(stream);
-                    mediaRecorder = new MediaRecorder(stream); 
-                    mediaRecorder.start(); 
-                    audioChunks = [];
-                    mediaRecorder.addEventListener("dataavailable", e => { audioChunks.push(e.data); });
-                    mediaRecorder.addEventListener("stop", () => {
-                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                        userRecordings[currentLineIndex] = audioBlob; 
-                        stream.getTracks().forEach(t => t.stop());
-                        if (audioContext && audioContext.state !== 'closed') {
-                            audioContext.close().then(() => audioContext = null);
-                        }
-                    });
-                    recognition.start();
-                }).catch(err => { 
-                    statusArea.textContent = `Lỗi truy cập microphone: ${err.message}`; 
-                    statusArea.className = 'status error'; 
-                    recordBtn.disabled = false; 
-                    recordBtn.textContent = '🎤 Thử Lại';
-                    isRecording = false;
-                    interimTranscriptArea.style.display = 'none';
-                });
+            if (!linesA.length && !linesB.length) {
+                alert("Không có câu thoại hợp lệ!"); return;
             }
-            
-            recordBtn.addEventListener('click', startRecording);
-            
-            function handleNextTurn() {
-                const userText = userIsB ? linesB[currentLineIndex] : linesA[currentLineIndex];
-                if (userText) {
-                     if (autoRecordCheckbox.checked) {
-                        statusArea.textContent = 'Đến lượt bạn. Chuẩn bị ghi âm...';
-                        setTimeout(startRecording, 500);
-                    } else {
-                        statusArea.textContent = 'Đến lượt bạn. Hãy nhấn nút để ghi âm.';
-                        recordBtn.disabled = false;
-                        recordBtn.textContent = '🎤 Bắt Đầu Ghi Âm';
-                    }
-                } else {
-                    currentLineIndex++;
-                    const conversationLength = Math.max(linesA.length, linesB.length);
-                    if (currentLineIndex >= conversationLength) {
-                        setTimeout(showReview, 1000);
-                        return;
-                    }
-                    const nextLineToSpeak = userIsB ? linesA[currentLineIndex] : linesB[currentLineIndex];
-                    if (nextLineToSpeak) {
-                        speak(nextLineToSpeak, handleNextTurn);
-                    } else {
-                        setTimeout(showReview, 1000);
-                    }
-                }
-            }
-            
-            async function processFinalResult(spokenText) {
-                if (!isRecording) return;
-                isRecording = false; 
-                const targetText = userIsB ? linesB[currentLineIndex] : linesA[currentLineIndex];
-                const difficultyThreshold = parseInt(document.querySelector('input[name="difficulty"]:checked').value);
-                const { html: diffHtml, accuracy } = createDiffHtml(targetText, spokenText.trim());
-
-                if (accuracy >= difficultyThreshold) {
-                    statusArea.className = 'status success';
-                    const rewardMsg = getRandomItem(rewardsInput.value);
-                    statusArea.innerHTML = `${rewardMsg} (Độ chính xác: ${accuracy}%)`;
-                    await playAudioPromise(successAudioURL);
-                    currentLineIndex++;
-                    const conversationLength = Math.max(linesA.length, linesB.length);
-                    if (currentLineIndex >= conversationLength) {
-                        setTimeout(showReview, 1000);
-                        return;
-                    }
-                    updateDialogueDisplay();
-                    const nextLineToSpeak = userIsB ? linesA[currentLineIndex] : (linesB[currentLineIndex] || null);
-                    if (nextLineToSpeak) {
-                        statusArea.textContent = 'Máy đang nói...';
-                        recordBtn.disabled = true;
-                        recordBtn.textContent = '...';
-                        const speakPromise = new Promise(resolve => speak(nextLineToSpeak, resolve));
-                        await speakPromise;
-                        handleNextTurn();
-                    } else {
-                        handleNextTurn();
-                    }
-                } else {
-                    statusArea.className = 'status error';
-                    score -= 5;
-                    updateScoreDisplay();
-                    const penaltyMsg = getRandomItem(penaltiesInput.value);
-                    statusArea.innerHTML = `<div style="margin-bottom: 10px;">${penaltyMsg} (${accuracy}%). Thử lại nhé! (-5 điểm)</div><div class="feedback-box">${diffHtml}</div>`;
-                    if (failureAudioURL) {
-                        if (currentFailureAudio) { currentFailureAudio.pause(); }
-                        currentFailureAudio = new Audio(failureAudioURL);
-                        currentFailureAudio.play();
-                        currentFailureAudio.onended = () => { currentFailureAudio = null; };
-                    }
-                    recordBtn.disabled = false;
-                    recordBtn.textContent = '🎤 Thử Lại';
-                }
-            }
-            
-            recognition.onresult = (event) => {
-                clearTimeout(silenceTimeout);
-                let interim_transcript = '';
-                final_transcript = ''; 
-                for (let i = event.resultIndex; i < event.results.length; ++i) {
-                    if (event.results[i].isFinal) {
-                        final_transcript += event.results[i][0].transcript;
-                    } else {
-                        interim_transcript += event.results[i][0].transcript;
-                    }
-                }
-                interimTranscriptArea.textContent = interim_transcript;
-                silenceTimeout = setTimeout(() => {
-                    recognition.stop();
-                }, 3000); // <-- TĂNG THỜI GIAN CHỜ LÊN 5 GIÂY
-            };
-            
-            recognition.onend = () => {
-                stopDrawing();
-                if (mediaRecorder && mediaRecorder.state === "recording") { mediaRecorder.stop(); }
-                interimTranscriptArea.style.display = 'none';
-                if (final_transcript && isRecording) {
-                    processFinalResult(final_transcript);
-                } else if (isRecording) {
-                    isRecording = false;
-                    recordBtn.disabled = false;
-                    recordBtn.textContent = '🎤 Thử Lại';
-                    statusArea.textContent = "Không nghe thấy giọng nói. Vui lòng thử lại.";
-                    statusArea.className = 'status error';
-                }
-            };
-
-            recognition.onerror = (event) => { 
-                if (event.error !== 'no-speech') {
-                     statusArea.textContent = `Lỗi: ${event.error}. Vui lòng thử lại.`; 
-                     statusArea.className = 'status error'; 
-                }
-                isRecording = false;
-                recordBtn.disabled = false;
-                interimTranscriptArea.style.display = 'none';
-            };
-            
-            // SỰ KIỆN CHO CÁC NÚT MỚI
-            restartSessionBtn.addEventListener('click', () => {
-                startPractice();
-            });
-
-            chooseNewBtn.addEventListener('click', () => {
-                reviewArea.style.display = 'none'; 
-                initialSetup.style.display = 'block'; 
-                practiceArea.style.display = 'none'; 
-                sessionControlsArea.style.display = 'none'; 
-                canvas.style.display = 'none';
-                statusArea.innerHTML = ''; 
-                statusArea.className = 'status';
-                dialogueInput.value = ''; 
-                linesA = []; linesB = []; userRecordings = []; currentLineIndex = 0; 
-                score = 100;
-                updateScoreDisplay();
-                if (conversationContainer) {
-                    conversationContainer.style.display = 'block';
-                }
-            });
-            
-            function playAudioBlob(blob) { return new Promise((resolve, reject) => { if (!blob) { resolve(); return; } const audioUrl = URL.createObjectURL(blob); const audio = new Audio(audioUrl); audio.onended = resolve; audio.onerror = reject; audio.play(); }); }
-            
-            playAllBtn.addEventListener('click', async () => {
-                playAllBtn.disabled = true; 
-                restartSessionBtn.disabled = true;
-                chooseNewBtn.disabled = true;
-                document.querySelectorAll('.play-recording-btn').forEach(btn => btn.disabled = true);
-                statusArea.textContent = 'Đang phát lại toàn bộ hội thoại...'; 
-                statusArea.className = 'status';
-                try {
-                    const conversationLength = Math.max(linesA.length, linesB.length);
-                    for (let i = 0; i < conversationLength; i++) {
-                        const lineA = linesA[i];
-                        const lineB = linesB[i];
-                        const recording = userRecordings[i];
-                        const speakPromise = (text) => new Promise(resolve => speak(text, resolve));
-                        if (userIsB) {
-                            if (lineA) await speakPromise(lineA);
-                            if (recording) await playAudioBlob(recording);
-                        } else {
-                            if (recording) await playAudioBlob(recording);
-                            if (lineB) await speakPromise(lineB);
-                        }
-                    }
-                } catch (error) { 
-                    console.error("Playback failed:", error); 
-                    statusArea.textContent = 'Lỗi khi phát lại.'; 
-                    statusArea.className = 'status error';
-                } finally {
-                    playAllBtn.disabled = false; 
-                    restartSessionBtn.disabled = false;
-                    chooseNewBtn.disabled = false;
-                    document.querySelectorAll('.play-recording-btn').forEach(btn => btn.disabled = false);
-                    statusArea.innerHTML = '🎉 Phát lại hoàn tất! 🎉';
-                    statusArea.className = 'status success';
-                }
-            });
-
-            successAudioInput.addEventListener('change', (event) => {
-                const file = event.target.files[0];
-                if (file) {
-                    if (successAudioURL) URL.revokeObjectURL(successAudioURL);
-                    successAudioURL = URL.createObjectURL(file);
-                }
-            });
-
-            failureAudioInput.addEventListener('change', (event) => {
-                const file = event.target.files[0];
-                if (file) {
-                    if (failureAudioURL) URL.revokeObjectURL(failureAudioURL);
-                    failureAudioURL = URL.createObjectURL(file);
-                }
-            });
+            currentLineIndex = 0;
+            score = 100;
+            scoreArea.innerText = `Điểm: ${score}`;
+            document.getElementById('practice-area').style.display = "block";
+            recordBtn.disabled = false;
+            nextTurn();
         });
+    });
     </script>
 </body>
 </html>
