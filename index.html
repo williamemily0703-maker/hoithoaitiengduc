@@ -281,351 +281,466 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // --- BẮT ĐẦU PHẦN TẢI HỘI THOẠI TỪ GITHUB ---
-            const owner = 'truongkhaai136-dot';
-            const repo = 'webtiengduc';
-            const baseFolderPath = 'hoi-thoai';
-            const conversationContainer = document.getElementById('danh-sach-hoi-thoai');
-            const dialogueInput = document.getElementById('dialogue-input'); 
+       document.addEventListener('DOMContentLoaded', function() {
+    // --- BẮT ĐẦU PHẦN TẢI HỘI THOẠI TỪ GITHUB ---
+    const owner = 'truongkhaai136-dot';
+    const repo = 'webtiengduc';
+    const baseFolderPath = 'hoi-thoai';
+    const conversationContainer = document.getElementById('danh-sach-hoi-thoai');
+    const dialogueInput = document.getElementById('dialogue-input');
 
-            let fileList = [];
+    let fileList = [];
 
-            function loadFileContent(downloadUrl, buttonElement) {
-                document.querySelectorAll('.file-button').forEach(btn => btn.disabled = true);
-                buttonElement.textContent = 'Đang tải...';
+    function loadFileContent(downloadUrl, buttonElement) {
+        document.querySelectorAll('.file-button').forEach(btn => btn.disabled = true);
+        buttonElement.textContent = 'Đang tải...';
 
-                fetch(downloadUrl)
-                    .then(response => response.text())
-                    .then(content => {
-                        dialogueInput.value = content;
-                        dialogueInput.focus();
-                        dialogueInput.scrollTop = 0;
-                        
-                        buttonElement.textContent = 'Đã tải thành công!';
-                        buttonElement.style.backgroundColor = '#198754';
-                        
-                        setTimeout(() => {
-                            document.querySelectorAll('.file-button').forEach(btn => {
-                                btn.disabled = false;
-                                btn.textContent = btn.dataset.filename;
-                                btn.style.backgroundColor = '#0d6efd';
-                            });
-                        }, 1500);
-                    })
-                    .catch(error => {
-                        console.error('Lỗi khi tải nội dung file:', error);
-                        buttonElement.textContent = 'Tải lỗi!';
-                        buttonElement.style.backgroundColor = '#dc3545';
+        fetch(downloadUrl)
+            .then(response => response.text())
+            .then(content => {
+                dialogueInput.value = content;
+                dialogueInput.focus();
+                dialogueInput.scrollTop = 0;
+
+                buttonElement.textContent = 'Đã tải thành công!';
+                buttonElement.style.backgroundColor = '#198754';
+
+                setTimeout(() => {
+                    document.querySelectorAll('.file-button').forEach(btn => {
+                        btn.disabled = false;
+                        btn.textContent = btn.dataset.filename;
+                        btn.style.backgroundColor = '#0d6efd';
                     });
-            }
-            
-            function renderFileList() {
-                if (!conversationContainer) return;
-                conversationContainer.innerHTML = '<h2>Chọn một hội thoại để bắt đầu:</h2>';
-                
-                fileList.sort((a, b) => a.path.localeCompare(b.path));
+                }, 1500);
+            })
+            .catch(error => {
+                console.error('Lỗi khi tải nội dung file:', error);
+                buttonElement.textContent = 'Tải lỗi!';
+                buttonElement.style.backgroundColor = '#dc3545';
+            });
+    }
 
-                fileList.forEach(file => {
-                    const button = document.createElement('button');
-                    const prettyName = file.path
-                        .replace(baseFolderPath + '/', '')
-                        .replace('.txt', '')
-                        .replace(/\//g, ' / ')
-                        .replace(/_/g, ' ')
-                        .replace(/-/g, ' ');
-                    
-                    button.textContent = prettyName;
-                    button.dataset.filename = prettyName;
-                    button.title = `Tải hội thoại: ${prettyName}`;
-                    button.classList.add('file-button');
-                    
-                    button.addEventListener('click', () => {
-                        loadFileContent(file.download_url, button);
-                    });
-                    
-                    conversationContainer.appendChild(button);
-                });
-            }
+    function renderFileList() {
+        if (!conversationContainer) return;
+        conversationContainer.innerHTML = '<h2>Chọn một hội thoại để bắt đầu:</h2>';
 
-            async function fetchAllFiles(path) {
-                const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-                try {
-                    const response = await fetch(apiUrl);
-                    if (!response.ok) throw new Error(`Lỗi mạng khi truy cập ${path}`);
-                    const items = await response.json();
+        fileList.sort((a, b) => a.path.localeCompare(b.path));
 
-                    const promises = items.map(async (item) => {
-                        if (item.type === 'dir') {
-                            await fetchAllFiles(item.path);
-                        } else if (item.type === 'file' && item.name.endsWith('.txt')) {
-                            fileList.push({
-                                path: item.path,
-                                download_url: item.download_url
-                            });
-                        }
-                    });
+        fileList.forEach(file => {
+            const button = document.createElement('button');
+            const prettyName = file.path
+                .replace(baseFolderPath + '/', '')
+                .replace('.txt', '')
+                .replace(/\//g, ' / ')
+                .replace(/_/g, ' ')
+                .replace(/-/g, ' ');
 
-                    await Promise.all(promises);
-                } catch (error) {
-                    console.error(error);
-                    if(conversationContainer) {
-                        conversationContainer.innerHTML = `<p style="color: red;">Lỗi: Không thể tải danh sách hội thoại từ GitHub.</p>`;
-                    }
-                }
-            }
+            button.textContent = prettyName;
+            button.dataset.filename = prettyName;
+            button.title = `Tải hội thoại: ${prettyName}`;
+            button.classList.add('file-button');
 
-            if (conversationContainer && dialogueInput) {
-                fetchAllFiles(baseFolderPath).then(() => {
-                    renderFileList();
-                });
-            }
-            // --- KẾT THÚC PHẦN TẢI HỘI THOẠI ---
-
-
-            // --- BẮT ĐẦU PHẦN LUYỆN NÓI CỦA BẠN ---
-            // --- 1. Lấy các phần tử HTML ---
-            const loadBtn = document.getElementById('load-btn');
-            const swapRolesBtn = document.getElementById('swap-roles-btn');
-            const toggleBtn = document.getElementById('toggle-line-btn');
-            const recordBtn = document.getElementById('record-btn');
-            const practiceArea = document.getElementById('practice-area');
-            const computerLine = document.getElementById('computer-line');
-            const userLine = document.getElementById('user-line');
-            const userLineTitle = document.getElementById('user-line-title');
-            const statusArea = document.getElementById('status-area');
-            const initialSetup = document.getElementById('initial-setup');
-            const sessionControlsArea = document.getElementById('session-controls-area');
-            const reviewArea = document.getElementById('review-area');
-            const reviewContent = document.getElementById('review-content');
-            const playAllBtn = document.getElementById('play-all-btn');
-            const restartSessionBtn = document.getElementById('restart-session-btn');
-            const chooseNewBtn = document.getElementById('choose-new-btn');
-            const rewardsInput = document.getElementById('rewards-input');
-            const penaltiesInput = document.getElementById('penalties-input');
-            const scoreArea = document.getElementById('score-area');
-            const canvas = document.getElementById('audio-canvas');
-            const canvasCtx = canvas.getContext('2d');
-            const autoRecordCheckbox = document.getElementById('auto-record');
-            const interimTranscriptArea = document.getElementById('interim-transcript-area');
-            const successAudioInput = document.getElementById('success-audio');
-            const failureAudioInput = document.getElementById('failure-audio');
-
-            // --- 2. Khởi tạo Web API & Biến trạng thái ---
-            // === Ghi âm mới qua popup ===
-function openTranslatePopup() {
-    const popup = window.open(
-        "translate-popup.html",
-        "translatePopup",
-        "width=500,height=400"
-    );
-
-    // Nhận transcript từ popup
-    window.addEventListener("message", (event) => {
-        if (event.data && event.data.transcript) {
-            const spokenText = event.data.transcript.trim();
-            console.log("Nhận từ popup:", spokenText);
-            processFinalResult(spokenText); // Gọi hàm chấm điểm cũ
-        }
-    }, { once: true });
-}
-
-// Ghi đè lại nút ghi âm
-recordBtn.addEventListener('click', openTranslatePopup);
-
-            
-            function handleNextTurn() {
-                const userText = userIsB ? linesB[currentLineIndex] : linesA[currentLineIndex];
-                if (userText) {
-                     if (autoRecordCheckbox.checked) {
-                        statusArea.textContent = 'Đến lượt bạn. Chuẩn bị ghi âm...';
-                        setTimeout(startRecording, 500);
-                    } else {
-                        statusArea.textContent = 'Đến lượt bạn. Hãy nhấn nút để ghi âm.';
-                        recordBtn.disabled = false;
-                        recordBtn.textContent = '🎤 Bắt Đầu Ghi Âm';
-                    }
-                } else {
-                    currentLineIndex++;
-                    const conversationLength = Math.max(linesA.length, linesB.length);
-                    if (currentLineIndex >= conversationLength) {
-                        setTimeout(showReview, 1000);
-                        return;
-                    }
-                    const nextLineToSpeak = userIsB ? linesA[currentLineIndex] : linesB[currentLineIndex];
-                    if (nextLineToSpeak) {
-                        speak(nextLineToSpeak, handleNextTurn);
-                    } else {
-                        setTimeout(showReview, 1000);
-                    }
-                }
-            }
-            
-            async function processFinalResult(spokenText) {
-                if (!isRecording) return;
-                isRecording = false; 
-                const targetText = userIsB ? linesB[currentLineIndex] : linesA[currentLineIndex];
-                const difficultyThreshold = parseInt(document.querySelector('input[name="difficulty"]:checked').value);
-                const { html: diffHtml, accuracy } = createDiffHtml(targetText, spokenText.trim());
-
-                if (accuracy >= difficultyThreshold) {
-                    statusArea.className = 'status success';
-                    const rewardMsg = getRandomItem(rewardsInput.value);
-                    statusArea.innerHTML = `${rewardMsg} (Độ chính xác: ${accuracy}%)`;
-                    await playAudioPromise(successAudioURL);
-                    currentLineIndex++;
-                    const conversationLength = Math.max(linesA.length, linesB.length);
-                    if (currentLineIndex >= conversationLength) {
-                        setTimeout(showReview, 1000);
-                        return;
-                    }
-                    updateDialogueDisplay();
-                    const nextLineToSpeak = userIsB ? linesA[currentLineIndex] : (linesB[currentLineIndex] || null);
-                    if (nextLineToSpeak) {
-                        statusArea.textContent = 'Máy đang nói...';
-                        recordBtn.disabled = true;
-                        recordBtn.textContent = '...';
-                        const speakPromise = new Promise(resolve => speak(nextLineToSpeak, resolve));
-                        await speakPromise;
-                        handleNextTurn();
-                    } else {
-                        handleNextTurn();
-                    }
-                } else {
-                    statusArea.className = 'status error';
-                    score -= 5;
-                    updateScoreDisplay();
-                    const penaltyMsg = getRandomItem(penaltiesInput.value);
-                    statusArea.innerHTML = `<div style="margin-bottom: 10px;">${penaltyMsg} (${accuracy}%). Thử lại nhé! (-5 điểm)</div><div class="feedback-box">${diffHtml}</div>`;
-                    if (failureAudioURL) {
-                        if (currentFailureAudio) { currentFailureAudio.pause(); }
-                        currentFailureAudio = new Audio(failureAudioURL);
-                        currentFailureAudio.play();
-                        currentFailureAudio.onended = () => { currentFailureAudio = null; };
-                    }
-                    recordBtn.disabled = false;
-                    recordBtn.textContent = '🎤 Thử Lại';
-                }
-            }
-            
-            recognition.onresult = (event) => {
-                clearTimeout(silenceTimeout);
-                let interim_transcript = '';
-                final_transcript = ''; 
-                for (let i = event.resultIndex; i < event.results.length; ++i) {
-                    if (event.results[i].isFinal) {
-                        final_transcript += event.results[i][0].transcript;
-                    } else {
-                        interim_transcript += event.results[i][0].transcript;
-                    }
-                }
-                interimTranscriptArea.textContent = interim_transcript;
-                silenceTimeout = setTimeout(() => {
-                    recognition.stop();
-                }, 3000); // <-- TĂNG THỜI GIAN CHỜ LÊN 5 GIÂY
-            };
-            
-            recognition.onend = () => {
-                stopDrawing();
-                if (mediaRecorder && mediaRecorder.state === "recording") { mediaRecorder.stop(); }
-                interimTranscriptArea.style.display = 'none';
-                if (final_transcript && isRecording) {
-                    processFinalResult(final_transcript);
-                } else if (isRecording) {
-                    isRecording = false;
-                    recordBtn.disabled = false;
-                    recordBtn.textContent = '🎤 Thử Lại';
-                    statusArea.textContent = "Không nghe thấy giọng nói. Vui lòng thử lại.";
-                    statusArea.className = 'status error';
-                }
-            };
-
-            recognition.onerror = (event) => { 
-                if (event.error !== 'no-speech') {
-                     statusArea.textContent = `Lỗi: ${event.error}. Vui lòng thử lại.`; 
-                     statusArea.className = 'status error'; 
-                }
-                isRecording = false;
-                recordBtn.disabled = false;
-                interimTranscriptArea.style.display = 'none';
-            };
-            
-            // SỰ KIỆN CHO CÁC NÚT MỚI
-            restartSessionBtn.addEventListener('click', () => {
-                startPractice();
+            button.addEventListener('click', () => {
+                loadFileContent(file.download_url, button);
             });
 
-            chooseNewBtn.addEventListener('click', () => {
-                reviewArea.style.display = 'none'; 
-                initialSetup.style.display = 'block'; 
-                practiceArea.style.display = 'none'; 
-                sessionControlsArea.style.display = 'none'; 
-                canvas.style.display = 'none';
-                statusArea.innerHTML = ''; 
-                statusArea.className = 'status';
-                dialogueInput.value = ''; 
-                linesA = []; linesB = []; userRecordings = []; currentLineIndex = 0; 
-                score = 100;
-                updateScoreDisplay();
-                if (conversationContainer) {
-                    conversationContainer.style.display = 'block';
-                }
-            });
-            
-            function playAudioBlob(blob) { return new Promise((resolve, reject) => { if (!blob) { resolve(); return; } const audioUrl = URL.createObjectURL(blob); const audio = new Audio(audioUrl); audio.onended = resolve; audio.onerror = reject; audio.play(); }); }
-            
-            playAllBtn.addEventListener('click', async () => {
-                playAllBtn.disabled = true; 
-                restartSessionBtn.disabled = true;
-                chooseNewBtn.disabled = true;
-                document.querySelectorAll('.play-recording-btn').forEach(btn => btn.disabled = true);
-                statusArea.textContent = 'Đang phát lại toàn bộ hội thoại...'; 
-                statusArea.className = 'status';
-                try {
-                    const conversationLength = Math.max(linesA.length, linesB.length);
-                    for (let i = 0; i < conversationLength; i++) {
-                        const lineA = linesA[i];
-                        const lineB = linesB[i];
-                        const recording = userRecordings[i];
-                        const speakPromise = (text) => new Promise(resolve => speak(text, resolve));
-                        if (userIsB) {
-                            if (lineA) await speakPromise(lineA);
-                            if (recording) await playAudioBlob(recording);
-                        } else {
-                            if (recording) await playAudioBlob(recording);
-                            if (lineB) await speakPromise(lineB);
-                        }
-                    }
-                } catch (error) { 
-                    console.error("Playback failed:", error); 
-                    statusArea.textContent = 'Lỗi khi phát lại.'; 
-                    statusArea.className = 'status error';
-                } finally {
-                    playAllBtn.disabled = false; 
-                    restartSessionBtn.disabled = false;
-                    chooseNewBtn.disabled = false;
-                    document.querySelectorAll('.play-recording-btn').forEach(btn => btn.disabled = false);
-                    statusArea.innerHTML = '🎉 Phát lại hoàn tất! 🎉';
-                    statusArea.className = 'status success';
-                }
-            });
-
-            successAudioInput.addEventListener('change', (event) => {
-                const file = event.target.files[0];
-                if (file) {
-                    if (successAudioURL) URL.revokeObjectURL(successAudioURL);
-                    successAudioURL = URL.createObjectURL(file);
-                }
-            });
-
-            failureAudioInput.addEventListener('change', (event) => {
-                const file = event.target.files[0];
-                if (file) {
-                    if (failureAudioURL) URL.revokeObjectURL(failureAudioURL);
-                    failureAudioURL = URL.createObjectURL(file);
-                }
-            });
+            conversationContainer.appendChild(button);
         });
+    }
+
+    async function fetchAllFiles(path) {
+        const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+        try {
+            const response = await fetch(apiUrl);
+            if (!response.ok) throw new Error(`Lỗi mạng khi truy cập ${path}`);
+            const items = await response.json();
+
+            const promises = items.map(async (item) => {
+                if (item.type === 'dir') {
+                    await fetchAllFiles(item.path);
+                } else if (item.type === 'file' && item.name.endsWith('.txt')) {
+                    fileList.push({
+                        path: item.path,
+                        download_url: item.download_url
+                    });
+                }
+            });
+
+            await Promise.all(promises);
+        } catch (error) {
+            console.error(error);
+            if (conversationContainer) {
+                conversationContainer.innerHTML = `<p style="color: red;">Lỗi: Không thể tải danh sách hội thoại từ GitHub.</p>`;
+            }
+        }
+    }
+
+    if (conversationContainer && dialogueInput) {
+        fetchAllFiles(baseFolderPath).then(() => {
+            renderFileList();
+        });
+    }
+    // --- KẾT THÚC PHẦN TẢI HỘI THOẠI ---
+
+
+    // --- BẮT ĐẦU PHẦN LUYỆN NÓI CỦA BẠN ---
+    // --- 1. Lấy các phần tử HTML ---
+    const loadBtn = document.getElementById('load-btn');
+    const swapRolesBtn = document.getElementById('swap-roles-btn');
+    const toggleBtn = document.getElementById('toggle-line-btn');
+    const recordBtn = document.getElementById('record-btn');
+    const practiceArea = document.getElementById('practice-area');
+    const computerLine = document.getElementById('computer-line');
+    const userLine = document.getElementById('user-line');
+    const userLineTitle = document.getElementById('user-line-title');
+    const statusArea = document.getElementById('status-area');
+    const initialSetup = document.getElementById('initial-setup');
+    const sessionControlsArea = document.getElementById('session-controls-area');
+    const reviewArea = document.getElementById('review-area');
+    const reviewContent = document.getElementById('review-content');
+    const playAllBtn = document.getElementById('play-all-btn');
+    const restartSessionBtn = document.getElementById('restart-session-btn');
+    const chooseNewBtn = document.getElementById('choose-new-btn');
+    const rewardsInput = document.getElementById('rewards-input');
+    const penaltiesInput = document.getElementById('penalties-input');
+    const scoreArea = document.getElementById('score-area');
+    const canvas = document.getElementById('audio-canvas');
+    const canvasCtx = canvas.getContext('2d');
+    const autoRecordCheckbox = document.getElementById('auto-record');
+    const interimTranscriptArea = document.getElementById('interim-transcript-area');
+    const successAudioInput = document.getElementById('success-audio');
+    const failureAudioInput = document.getElementById('failure-audio');
+
+    // --- 2. Khởi tạo Web API & Biến trạng thái ---
+    let linesA = [];
+    let linesB = [];
+    let userIsB = true; // Người dùng mặc định là B
+    let currentLineIndex = 0;
+    let score = 100;
+    let userRecordings = []; // Mảng lưu các bản ghi âm của người dùng
+    let isRecording = false;
+    let successAudioURL = null;
+    let failureAudioURL = null;
+    let currentFailureAudio = null;
+
+    // --- CÁC HÀM TIỆN ÍCH ---
+    function getRandomItem(textareaValue) {
+        const items = textareaValue.split('\n').filter(item => item.trim() !== '');
+        return items[Math.floor(Math.random() * items.length)] || '';
+    }
+
+    function updateScoreDisplay() {
+        scoreArea.textContent = `Điểm: ${score}`;
+    }
+
+    function speak(text, onEndCallback) {
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'de-DE';
+            utterance.rate = 0.9;
+            utterance.onend = onEndCallback;
+            window.speechSynthesis.speak(utterance);
+        } else {
+            alert("Trình duyệt không hỗ trợ Text-to-Speech.");
+            onEndCallback();
+        }
+    }
+
+    // --- CÁC HÀM CHÍNH CỦA ỨNG DỤNG (BỔ SUNG) ---
+
+    // Hàm đổi vai
+    swapRolesBtn.addEventListener('click', () => {
+        userIsB = !userIsB;
+        swapRolesBtn.textContent = userIsB ? '🔁 Đổi Vai (Hiện tại: Bạn là B)' : '🔁 Đổi Vai (Hiện tại: Bạn là A)';
+    });
+    
+    // Hàm bắt đầu luyện tập
+    loadBtn.addEventListener('click', () => {
+        startPractice();
+    });
+
+    function startPractice() {
+        const dialogueText = dialogueInput.value.trim();
+        if (!dialogueText) {
+            alert('Vui lòng nhập hoặc chọn một hội thoại!');
+            return;
+        }
+
+        // Reset lại trạng thái
+        linesA = [];
+        linesB = [];
+        userRecordings = [];
+        currentLineIndex = 0;
+        score = 100;
+        updateScoreDisplay();
+
+        // Xử lý và tách lời thoại
+        const allLines = dialogueText.split('\n').filter(line => line.trim() !== '');
+        allLines.forEach(line => {
+            if (line.toLowerCase().startsWith('a:')) {
+                linesA.push(line.substring(2).trim());
+            } else if (line.toLowerCase().startsWith('b:')) {
+                linesB.push(line.substring(2).trim());
+            }
+        });
+        
+        if (linesA.length === 0 && linesB.length === 0) {
+            alert('Định dạng hội thoại không hợp lệ. Vui lòng dùng "A:" và "B:"');
+            return;
+        }
+
+        // Ẩn/hiện các khu vực
+        initialSetup.style.display = 'none';
+        reviewArea.style.display = 'none';
+        if (conversationContainer) {
+            conversationContainer.style.display = 'none';
+        }
+        practiceArea.style.display = 'block';
+        sessionControlsArea.style.display = 'block';
+        statusArea.innerHTML = '';
+        statusArea.className = 'status';
+        toggleBtn.disabled = false;
+        toggleBtn.textContent = '🙈 Hiện Lời Thoại';
+        userLine.style.display = 'none';
+
+        // Bắt đầu vòng lặp hội thoại
+        if (userIsB) {
+            // Nếu người dùng là B, máy (A) nói trước
+            statusArea.textContent = 'Máy đang nói...';
+            recordBtn.disabled = true;
+            updateDialogueDisplay();
+            speak(linesA[currentLineIndex], handleNextTurn);
+        } else {
+            // Nếu người dùng là A, đến lượt người dùng nói trước
+            updateDialogueDisplay();
+            handleNextTurn();
+        }
+    }
+    
+    function updateDialogueDisplay() {
+        const computerText = userIsB ? (linesA[currentLineIndex] || '...') : (linesB[currentLineIndex] || '...');
+        const userText = userIsB ? (linesB[currentLineIndex] || 'Kết thúc') : (linesA[currentLineIndex] || 'Kết thúc');
+
+        computerLine.textContent = computerText;
+        userLine.textContent = userText;
+        
+        // Cập nhật tiêu đề cho dễ hiểu
+        userLineTitle.textContent = userIsB ? "Câu của bạn (vai B):" : "Câu của bạn (vai A):";
+    }
+    
+    // Nút ẩn/hiện lời thoại
+    toggleBtn.addEventListener('click', () => {
+        const isHidden = userLine.style.display === 'none';
+        userLine.style.display = isHidden ? 'block' : 'none';
+        toggleBtn.textContent = isHidden ? '🙉 Ẩn Lời Thoại' : '🙈 Hiện Lời Thoại';
+    });
+
+
+    // --- PHẦN GHI ÂM VÀ XỬ LÝ KẾT QUẢ ---
+    function openTranslatePopup() {
+        // Cần cập nhật lời thoại trước khi mở popup
+        updateDialogueDisplay(); 
+        
+        const popup = window.open(
+            "translate-popup.html",
+            "translatePopup",
+            "width=500,height=400"
+        );
+        
+        if (!popup) {
+            alert("Vui lòng cho phép mở cửa sổ pop-up để ghi âm.");
+            return;
+        }
+
+        // Nhận transcript từ popup
+        const messageHandler = (event) => {
+            // Chỉ chấp nhận message từ popup vừa mở
+            if (event.source !== popup) {
+                return;
+            }
+            if (event.data && event.data.transcript) {
+                const spokenText = event.data.transcript.trim();
+                console.log("Nhận từ popup:", spokenText);
+                processFinalResult(spokenText); // Gọi hàm chấm điểm cũ
+                window.removeEventListener("message", messageHandler); // Dọn dẹp listener
+            }
+        };
+        
+        window.addEventListener("message", messageHandler);
+    }
+
+    recordBtn.addEventListener('click', openTranslatePopup);
+    
+    function handleNextTurn() {
+        updateDialogueDisplay();
+        const userText = userIsB ? linesB[currentLineIndex] : linesA[currentLineIndex];
+
+        if (userText) {
+             if (autoRecordCheckbox.checked) {
+                statusArea.textContent = 'Đến lượt bạn. Chuẩn bị ghi âm...';
+                setTimeout(openTranslatePopup, 1000); // Mở popup tự động
+            } else {
+                statusArea.textContent = 'Đến lượt bạn. Hãy nhấn nút để ghi âm.';
+                recordBtn.disabled = false;
+                recordBtn.textContent = '🎤 Bắt Đầu Ghi Âm';
+            }
+        } else {
+            // Đã hết lời thoại của người dùng -> kết thúc
+            setTimeout(showReview, 1000);
+        }
+    }
+    
+    // Hàm so sánh văn bản (dummy, cần một thư viện tốt hơn như diff-match-patch)
+    function createDiffHtml(original, spoken) {
+        // Đây là một phiên bản đơn giản hóa để tính độ chính xác
+        const originalWords = original.toLowerCase().split(/\s+/);
+        const spokenWords = spoken.toLowerCase().split(/\s+/);
+        let correctWords = 0;
+        originalWords.forEach(word => {
+            if (spokenWords.includes(word)) {
+                correctWords++;
+            }
+        });
+        const accuracy = originalWords.length > 0 ? Math.round((correctWords / originalWords.length) * 100) : 100;
+        // Phần tạo HTML để so sánh chi tiết có thể phức tạp, tạm thời bỏ qua để đơn giản
+        return {
+            html: `Bạn nói: "${spoken}"<br>Cần nói: "${original}"`,
+            accuracy: accuracy
+        };
+    }
+    
+    async function processFinalResult(spokenText) {
+        const targetText = userIsB ? linesB[currentLineIndex] : linesA[currentLineIndex];
+        if (!targetText) return;
+
+        const difficultyThreshold = parseInt(document.querySelector('input[name="difficulty"]:checked').value);
+        const { html: diffHtml, accuracy } = createDiffHtml(targetText, spokenText);
+        
+        // Lưu lại bản ghi âm (cần bổ sung logic này nếu muốn)
+        // userRecordings[currentLineIndex] = lastAudioBlob;
+
+        if (accuracy >= difficultyThreshold) {
+            statusArea.className = 'status success';
+            const rewardMsg = getRandomItem(rewardsInput.value);
+            statusArea.innerHTML = `${rewardMsg} (Độ chính xác: ${accuracy}%)`;
+            
+            if(successAudioURL) await new Audio(successAudioURL).play();
+
+            currentLineIndex++;
+            const conversationLength = Math.max(linesA.length, linesB.length);
+
+            if (currentLineIndex >= conversationLength) {
+                setTimeout(showReview, 1000);
+                return;
+            }
+
+            const nextLineToSpeak = userIsB ? linesA[currentLineIndex] : linesB[currentLineIndex];
+
+            if (nextLineToSpeak) {
+                statusArea.textContent = 'Máy đang nói...';
+                recordBtn.disabled = true;
+                recordBtn.textContent = '...';
+                speak(nextLineToSpeak, handleNextTurn);
+            } else {
+                // Hết lời thoại của máy, nhưng vẫn còn lời của người dùng
+                handleNextTurn();
+            }
+        } else {
+            statusArea.className = 'status error';
+            score -= 5;
+            updateScoreDisplay();
+            const penaltyMsg = getRandomItem(penaltiesInput.value);
+            statusArea.innerHTML = `<div style="margin-bottom: 10px;">${penaltyMsg} (${accuracy}%). Thử lại nhé! (-5 điểm)</div><div class="feedback-box">${diffHtml}</div>`;
+            
+            if (failureAudioURL) {
+                if (currentFailureAudio) { currentFailureAudio.pause(); }
+                currentFailureAudio = new Audio(failureAudioURL);
+                currentFailureAudio.play();
+            }
+            
+            recordBtn.disabled = false;
+            recordBtn.textContent = '🎤 Thử Lại';
+        }
+    }
+    
+    function showReview() {
+        practiceArea.style.display = 'none';
+        sessionControlsArea.style.display = 'none';
+        reviewArea.style.display = 'block';
+        statusArea.innerHTML = '🎉 Hoàn thành hội thoại! 🎉';
+        statusArea.className = 'status success';
+        
+        reviewContent.innerHTML = '';
+        const conversationLength = Math.max(linesA.length, linesB.length);
+
+        for (let i = 0; i < conversationLength; i++) {
+            const lineA = linesA[i];
+            const lineB = linesB[i];
+            
+            if (lineA) {
+                const div = document.createElement('div');
+                div.className = userIsB ? 'review-line computer' : 'review-line user';
+                div.textContent = `A: ${lineA}`;
+                reviewContent.appendChild(div);
+            }
+            if (lineB) {
+                 const div = document.createElement('div');
+                div.className = userIsB ? 'review-line user' : 'review-line computer';
+                div.textContent = `B: ${lineB}`;
+                reviewContent.appendChild(div);
+            }
+        }
+    }
+
+
+    // --- SỰ KIỆN CHO CÁC NÚT KHÁC ---
+    restartSessionBtn.addEventListener('click', () => {
+        startPractice();
+    });
+
+    chooseNewBtn.addEventListener('click', () => {
+        reviewArea.style.display = 'none';
+        initialSetup.style.display = 'block';
+        practiceArea.style.display = 'none';
+        sessionControlsArea.style.display = 'none';
+        canvas.style.display = 'none';
+        statusArea.innerHTML = '';
+        statusArea.className = 'status';
+        dialogueInput.value = '';
+        linesA = [];
+        linesB = [];
+        userRecordings = [];
+        currentLineIndex = 0;
+        score = 100;
+        updateScoreDisplay();
+        if (conversationContainer) {
+            conversationContainer.style.display = 'block';
+        }
+    });
+
+    playAllBtn.addEventListener('click', async () => {
+        playAllBtn.disabled = true;
+        // Logic phát lại toàn bộ hội thoại (cần có bản ghi âm)
+        alert("Chức năng nghe lại toàn bộ đang được phát triển!");
+        playAllBtn.disabled = false;
+    });
+
+    successAudioInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            if (successAudioURL) URL.revokeObjectURL(successAudioURL);
+            successAudioURL = URL.createObjectURL(file);
+        }
+    });
+
+    failureAudioInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            if (failureAudioURL) URL.revokeObjectURL(failureAudioURL);
+            failureAudioURL = URL.createObjectURL(file);
+        }
+    });
+});
     </script>
 </body>
 </html>
