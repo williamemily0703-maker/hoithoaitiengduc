@@ -214,7 +214,7 @@ function openTranslatePopup(){
       </div>
       <div class="tip">Mẹo: Nhấn <b>Ctrl/Cmd + C</b> bản tiếng Đức xong hãy quay lại đây.</div>
     </div>
-    <script>
+    <scr` + `ipt>
       const openerOrigin = "*"; // Có thể đổi sang origin cụ thể nếu bạn chạy trên web server.
       document.getElementById('pasteSendBtn').addEventListener('click', async () => {
         try{
@@ -228,7 +228,7 @@ function openTranslatePopup(){
       });
       document.getElementById('closeBtn').addEventListener('click', ()=> window.close());
       window.addEventListener('keydown', e=>{ if(e.key==='Escape') window.close(); });
-    </script>
+    </scr` + `ipt>
   </body></html>`;
   const popupUrl = URL.createObjectURL(new Blob([popupHtml], {type:'text/html'}));
   const w = 560, h = 420;
