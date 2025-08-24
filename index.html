@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Luyện Nói Tiếng Đức Pro — Popup Google Dịch</title>
+  <title>Luyện Nói Tiếng Đức Pro — Popup Google Dịch (Cách 2)</title>
   <style>
     :root { --primary:#0d6efd; --accent:#ffc107; --ok:#198754; --error:#dc3545; }
     *{ box-sizing:border-box }
@@ -21,18 +21,14 @@
     textarea{
       width:100%; padding:12px; border:1px solid #ced4da; border-radius:10px; font-size:1rem; resize:vertical;
     }
-    .controls,.session-controls{ display:flex; gap:10px; flex-wrap:wrap; margin:14px 0; }
+    .controls{ display:flex; gap:10px; flex-wrap:wrap; margin:14px 0; }
     button{
       border:0; background:var(--primary); color:#fff; padding:10px 18px; border-radius:9px;
       font-weight:600; cursor:pointer; transition:.2s; box-shadow:0 2px 5px rgba(0,0,0,.08);
     }
     button:hover{ transform:translateY(-1px); filter:brightness(0.95); }
     button.secondary{ background:#6c757d; }
-    button.success{ background:var(--ok); }
-    button.warning{ background:#fd7e14; }
-    button.info{ background:#0dcaf0; }
     button.ghost{ background:#e9ecef; color:#333; }
-    button:disabled{ opacity:.6; cursor:not-allowed; transform:none; }
     .dialogue-box{ background:#f8f9fa; border:1px solid #e9ecef; border-radius:10px; padding:14px; }
     .line{ padding:10px; margin:8px 0; border-radius:10px; font-size:1.05rem; }
     .computer-line{ background:#e7f3ff; }
@@ -41,19 +37,13 @@
     .status.success{ background:#d1e7dd; color:#146c43; }
     .status.error{ background:#f8d7da; color:#b02a37; }
     .status.neutral{ background:#eef; color:#334; }
-    .instructions{ background:#eef; padding:14px; border-radius:10px; border-left:4px solid var(--primary); color:#555; }
     .feedback-box{
       font-size:1rem; background:#f8f9fa; border:1px solid #ddd; border-radius:10px; padding:14px; line-height:1.7; margin-top:10px;
     }
-    .diff-correct{ color:#000; }
-    .diff-incorrect{ color:#dc3545; font-weight:700; text-decoration:underline; }
-    .diff-missing{ color:#6c757d; font-style:italic; }
     #score-area{
       position:fixed; top:18px; right:18px; background:var(--accent); color:#333;
       padding:8px 14px; border-radius:20px; font-weight:800; box-shadow:0 2px 6px rgba(0,0,0,.12);
     }
-    #danh-sach-hoi-thoai{ text-align:left; background:#f8f9fa; border:1px solid #dee2e6; border-radius:10px; padding:16px; margin-bottom:18px; }
-    .file-button{ background:var(--primary); padding:8px 13px; border-radius:8px; color:#fff; margin:4px; font-size:.95rem; }
   </style>
 </head>
 <body>
@@ -61,22 +51,7 @@
 <div class="container">
   <h1>Luyện Giao Tiếp Chuyên Nghiệp 🚀</h1>
 
-  <div id="danh-sach-hoi-thoai"></div>
-
   <div id="initial-setup">
-    <div class="instructions">
-      <b>Hướng dẫn:</b>
-      <ol>
-        <li>Chọn hội thoại có sẵn hoặc dán hội thoại của bạn vào ô bên dưới (dòng phải bắt đầu bằng <code>A:</code> hoặc <code>B:</code>).</li>
-        <li>Nhấn <b>Bắt Đầu Luyện Tập</b>. Khi đến lượt bạn, hệ thống mở <b>popup Google Dịch (Đức → Việt)</b>.</li>
-        <li>Trong popup, bấm <b>Mở Google Dịch</b> → nhấn biểu tượng <b>micro</b> và nói.</li>
-        <li>Sao chép đoạn tiếng Đức bạn vừa nói (ô bên trái của Google Dịch) → quay lại popup, bấm <b>Lấy từ Clipboard & Gửi</b> để chấm điểm tự động.</li>
-      </ol>
-      <div style="margin-top:8px; font-size:.95rem; color:#6c757d">
-        *Do giới hạn bảo mật trình duyệt, trang không thể đọc trực tiếp nội dung trên translate.google.com, nên cần một cú nhấp để lấy từ Clipboard.
-      </div>
-    </div>
-
     <textarea id="dialogue-input" rows="6" placeholder="Dán hội thoại ở đây...
 Ví dụ:
 A: Hallo, wie geht's?
@@ -104,331 +79,76 @@ B: Mir geht's gut, danke."></textarea>
     <h2>Xem Lại Hội Thoại</h2>
     <div id="review-content"></div>
     <div class="controls" style="margin-top: 10px;">
-      <button id="restart-session-btn" class="success">🔁 Luyện lại hội thoại này</button>
-      <button id="choose-new-btn" class="secondary">🏠 Chọn hội thoại khác</button>
+      <button id="restart-session-btn" class="secondary">🔁 Luyện lại</button>
+      <button id="choose-new-btn" class="secondary">🏠 Chọn mới</button>
     </div>
   </div>
 </div>
 
 <script>
-/* =====================
-   TIỆN ÍCH & CHẤM ĐIỂM
-   ===================== */
-function lcs(seq1, seq2){
-  const m=seq1.length,n=seq2.length;
-  const dp=Array.from({length:m+1},()=>Array(n+1).fill(0));
-  for(let i=1;i<=m;i++){
-    for(let j=1;j<=n;j++){
-      dp[i][j]=seq1[i-1]===seq2[j-1]?dp[i-1][j-1]+1:Math.max(dp[i-1][j],dp[i][j-1]);
-    }
-  }
-  let i=m,j=n,res=[];
-  while(i>0&&j>0){
-    if(seq1[i-1]===seq2[j-1]){ res.unshift(seq1[i-1]); i--; j--; }
-    else if(dp[i-1][j]>dp[i][j-1]) i--; else j--;
-  }
-  return res;
-}
-function createDiffHtml(originalText, spokenText){
-  const clean=t=>t.toLowerCase().replace(/[^\w\s'äöüß]/g,'').split(/\s+/).filter(Boolean);
-  const original=clean(originalText), spoken=clean(spokenText);
-  const common=new Set(lcs(original,spoken));
-  let correct=0;
-  const spokenHtml=spoken.map(w=>{
-    if(common.has(w)){ correct++; return `<span class="diff-correct">${w}</span>`; }
-    return `<span class="diff-incorrect">${w}</span>`;
-  }).join(' ');
-  const originalHtml=original.map(w=> common.has(w) ? `<span class="diff-correct">${w}</span>` : `<span class="diff-missing">${w}</span>`).join(' ');
-  const accuracy = original.length ? Math.round((correct/original.length)*100) : 0;
-  return { html:`<div><b>Câu gốc:</b> ${originalHtml}</div><div><b>Bạn nói:</b> ${spokenHtml}</div>`, accuracy };
-}
-
-/* =====================
-   BIẾN TRẠNG THÁI & UI
-   ===================== */
-const scoreArea = document.getElementById('score-area');
-const statusArea = document.getElementById('status-area');
-const dialogueInput = document.getElementById('dialogue-input');
-const loadBtn = document.getElementById('load-btn');
-const swapRolesBtn = document.getElementById('swap-roles-btn');
-const toggleBtn = document.getElementById('toggle-line-btn');
-
-const practiceArea = document.getElementById('practice-area');
-const computerLineEl = document.getElementById('computer-line');
-const userLineEl = document.getElementById('user-line');
-const userLineTitle = document.getElementById('user-line-title');
-
-const reviewArea = document.getElementById('review-area');
-const reviewContent = document.getElementById('review-content');
-const restartSessionBtn = document.getElementById('restart-session-btn');
-const chooseNewBtn = document.getElementById('choose-new-btn');
-
 let linesA=[], linesB=[], currentLineIndex=0, userIsB=true, isUserLineVisible=false;
 let score=100;
+const scoreArea=document.getElementById('score-area');
+const statusArea=document.getElementById('status-area');
+const userLineEl=document.getElementById('user-line');
+const userLineTitle=document.getElementById('user-line-title');
+const toggleBtn=document.getElementById('toggle-line-btn');
 
-/* =====================
-   GIỌNG ĐỌC (máy nói)
-   ===================== */
-const synth = window.speechSynthesis;
-let voices=[];
-function loadVoices(){ voices = synth.getVoices(); }
-loadVoices(); if(synth.onvoiceschanged !== undefined){ synth.onvoiceschanged = loadVoices; }
-function speak(text, cb){
-  if(synth.speaking) synth.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.voice = voices.find(v=>v.name==='Microsoft Amala Online (Natural) - German (Germany)') || voices.find(v=>v.lang?.startsWith('de'));
-  u.onend = ()=> cb && cb();
-  synth.speak(u);
+// Giọng máy đọc
+const synth=window.speechSynthesis; let voices=[];
+function loadVoices(){voices=synth.getVoices();}
+loadVoices(); if(synth.onvoiceschanged!==undefined){synth.onvoiceschanged=loadVoices;}
+function speak(text,cb){ if(synth.speaking) synth.cancel(); const u=new SpeechSynthesisUtterance(text); u.voice=voices.find(v=>v.lang?.startsWith('de')); u.onend=()=>cb&&cb(); synth.speak(u); }
+
+// === Popup quản lý ===
+let translatePopup=null;
+function ensurePopup(){
+  if(!translatePopup || translatePopup.closed){
+    translatePopup=window.open("","gt_popup","width=560,height=420");
+    translatePopup.document.write("<html><head><title>Popup sẵn sàng</title></head><body><p>Popup đã mở sẵn, đợi tới lượt bạn...</p></body></html>");
+  }
 }
-
-/* =====================
-   GOOGLE DỊCH POPUP
-   - Không dùng SpeechRecognition
-   - Dùng window.open + postMessage + Clipboard
-   ===================== */
 function openTranslatePopup(){
-  const popupHtml = `<!doctype html>
-  <html lang="vi"><head><meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Google Dịch (Đức → Việt)</title>
-  <style>
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:0;padding:16px;background:#f7f7fb;color:#222}
-    .box{background:#fff;border:1px solid #e5e7eb;border-radius:12px;max-width:560px;margin:0 auto;padding:16px;box-shadow:0 4px 14px rgba(0,0,0,.06)}
-    h1{font-size:1.1rem;margin:0 0 8px;color:#0d6efd}
-    p{margin:8px 0}
-    .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-    button,a.btn{background:#0d6efd;color:#fff;border:0;border-radius:10px;padding:10px 14px;font-weight:700;text-decoration:none;display:inline-block}
-    button.secondary{background:#6c757d}
-    .tip{font-size:.9rem;color:#555;background:#eef;padding:10px;border-radius:8px;margin-top:10px}
-  </style></head>
-  <body>
-    <div class="box">
-      <h1>Google Dịch — Nhận Transcript (DE → VI)</h1>
-      <p>1) Nhấn <b>Mở Google Dịch</b> → bấm biểu tượng <b>micro</b> và nói bằng tiếng Đức.</p>
-      <p>2) Chọn & Sao chép đoạn tiếng Đức vừa nói (ô bên trái).</p>
-      <p>3) Quay lại cửa sổ này và bấm <b>Lấy từ Clipboard & Gửi</b>.</p>
-      <div class="row">
-        <a class="btn" target="_blank" rel="noopener" href="https://translate.google.com/?sl=de&tl=vi&op=translate">🌐 Mở Google Dịch</a>
-        <button id="pasteSendBtn">📋 Lấy từ Clipboard & Gửi</button>
-        <button id="closeBtn" class="secondary">Đóng</button>
-      </div>
-      <div class="tip">Mẹo: Nhấn <b>Ctrl/Cmd + C</b> bản tiếng Đức xong hãy quay lại đây.</div>
-    </div>
-    <scr` + `ipt>
-      const openerOrigin = "*"; // Có thể đổi sang origin cụ thể nếu bạn chạy trên web server.
-      document.getElementById('pasteSendBtn').addEventListener('click', async () => {
-        try{
-          const text = await navigator.clipboard.readText();
-          if(!text || !text.trim()){ alert('Clipboard trống. Hãy sao chép đoạn TIẾNG ĐỨC ở ô trái của Google Dịch trước.'); return; }
-          window.opener && window.opener.postMessage({type:'GT_TRANSCRIPT', payload: text.trim()}, openerOrigin);
-          window.close();
-        }catch(err){
-          alert('Không đọc được clipboard: ' + err.message + '\\nHãy đảm bảo bạn vừa sao chép văn bản và cấp quyền clipboard cho trang.');
-        }
-      });
-      document.getElementById('closeBtn').addEventListener('click', ()=> window.close());
-      window.addEventListener('keydown', e=>{ if(e.key==='Escape') window.close(); });
-    </scr` + `ipt>
-  </body></html>`;
-  const popupUrl = URL.createObjectURL(new Blob([popupHtml], {type:'text/html'}));
-  const w = 560, h = 420;
-  const left = Math.round((window.screen.width - w)/2);
-  const top = Math.round((window.screen.height - h)/3);
-  window.open(popupUrl, 'gt_popup', `width=${w},height=${h},left=${left},top=${top}`);
-}
-
-window.addEventListener('message', (ev)=>{
-  try{
-    const {type, payload} = ev.data || {};
-    if(type==='GT_TRANSCRIPT'){
-      processSpokenText(String(payload||''));
-    }
-  }catch(_e){ /* ignore */ }
-});
-
-/* =====================
-   LUỒNG LUYỆN TẬP
-   ===================== */
-function updateScore(){ scoreArea.textContent = 'Điểm: ' + score; }
-function updateDialogueDisplay(){
-  const computerRole = userIsB ? 'A' : 'B';
-  const userRole = userIsB ? 'B' : 'A';
-  const computerText = userIsB ? linesA[currentLineIndex] : linesB[currentLineIndex];
-  const userText = userIsB ? linesB[currentLineIndex] : linesA[currentLineIndex];
-  document.getElementById('computer-line').textContent = `${computerRole} (Máy): ${computerText || '...'}`;
-  userLineEl.textContent = userText || '...';
-  userLineTitle.textContent = `Câu của bạn (${userRole}):`;
-  userLineEl.style.display = isUserLineVisible ? 'block' : 'none';
-  toggleBtn.textContent = isUserLineVisible ? '🙉 Ẩn Lời Thoại' : '🙈 Hiện Lời Thoại';
-  swapRolesBtn.textContent = `🔁 Đổi Vai (Hiện tại: Bạn là ${userRole})`;
-}
-function startPractice(){
-  currentLineIndex=0; score=100; updateScore();
-  document.getElementById('initial-setup').style.display='none';
-  document.getElementById('review-area').style.display='none';
-  practiceArea.style.display='block';
-  toggleBtn.disabled = false;
-  updateDialogueDisplay();
-  statusArea.className='status neutral';
-  statusArea.textContent='Máy đang nói...';
-  const next = userIsB ? linesA[0] : linesB[0];
-  if(next){ speak(next, ()=> handleNextTurn()); } else { handleNextTurn(); }
-}
-function handleNextTurn(){
-  const userText = userIsB ? linesB[currentLineIndex] : linesA[currentLineIndex];
-  if(userText){
-    statusArea.className='status neutral';
-    statusArea.innerHTML = 'Đến lượt bạn. <b>Mở popup Google Dịch để nói</b>.';
-    openTranslatePopup();
-  }else{
-    // Nếu lượt này rỗng, chuyển tiếp
-    currentLineIndex++;
-    const length = Math.max(linesA.length, linesB.length);
-    if(currentLineIndex>=length){ return showReview(); }
-    const next = userIsB ? linesA[currentLineIndex] : linesB[currentLineIndex];
-    if(next){ speak(next, ()=> handleNextTurn()); } else { showReview(); }
-  }
-}
-
-async function processSpokenText(spokenText){
-  const targetText = userIsB ? (linesB[currentLineIndex]||'') : (linesA[currentLineIndex]||'');
-  const {html, accuracy} = createDiffHtml(targetText, spokenText);
-  // mốc mặc định: 90%
-  const threshold = 90;
-  if(accuracy >= threshold){
-    statusArea.className='status success';
-    statusArea.innerHTML = `Tốt lắm! (Độ chính xác: ${accuracy}%)`;
-    currentLineIndex++;
-    const length = Math.max(linesA.length, linesB.length);
-    if(currentLineIndex>=length){ return setTimeout(showReview, 600); }
-    updateDialogueDisplay();
-    const next = userIsB ? linesA[currentLineIndex] : linesB[currentLineIndex];
-    if(next){
-      statusArea.className='status neutral';
-      statusArea.textContent='Máy đang nói...';
-      speak(next, ()=> handleNextTurn());
-    }else{ handleNextTurn(); }
-  }else{
-    statusArea.className='status error';
-    score = Math.max(0, score-5); updateScore();
-    statusArea.innerHTML = `<div style="margin-bottom:8px;">Chưa đạt chuẩn (${accuracy}%). Thử lại nhé! (-5 điểm)</div><div class="feedback-box">${html}</div>`;
-    // Mở lại popup cho bạn nói lại (chủ động)
-    setTimeout(()=> openTranslatePopup(), 200);
-  }
-}
-
-function showReview(){
-  practiceArea.style.display='none';
-  reviewArea.style.display='block';
-  statusArea.className = score >= 80 ? 'status success' : 'status error';
-  statusArea.textContent = score >= 80 ? `🎉 Hoàn thành! Điểm: ${score}` : `😅 Điểm: ${score}. Hãy luyện thêm nhé!`;
-  reviewContent.innerHTML = '';
-  const userRole = userIsB ? 'B' : 'A';
-  const length = Math.max(linesA.length, linesB.length);
-  for(let i=0;i<length;i++){
-    if(linesA[i]){
-      const d = document.createElement('div');
-      d.className='feedback-box';
-      d.textContent = (userRole==='A'?'A (Bạn): ':'A (Máy): ') + linesA[i];
-      reviewContent.appendChild(d);
-    }
-    if(linesB[i]){
-      const d = document.createElement('div');
-      d.className='feedback-box';
-      d.textContent = (userRole==='B'?'B (Bạn): ':'B (Máy): ') + linesB[i];
-      reviewContent.appendChild(d);
-    }
-  }
-}
-
-/* =====================
-   SỰ KIỆN UI CHÍNH
-   ===================== */
-loadBtn.addEventListener('click', ()=>{
-  const full = (dialogueInput.value||'').trim();
-  if(!full){ alert('Vui lòng nhập hội thoại!'); return; }
-  const lines = full.split('\n').filter(x=>x.trim()!=='');
-  linesA=[]; linesB=[];
-  lines.forEach(line=>{
-    const l=line.trim();
-    if(/^a:/i.test(l)) linesA.push(l.slice(2).trim());
-    else if(/^b:/i.test(l)) linesB.push(l.slice(2).trim());
-  });
-  if(linesA.length===0 && linesB.length===0){ alert('Không tìm thấy câu thoại hợp lệ (bắt đầu bằng "A:" hoặc "B:")'); return; }
-  startPractice();
-});
-swapRolesBtn.addEventListener('click', ()=>{
-  userIsB = !userIsB;
-  if(linesA.length||linesB.length){ startPractice(); } else { updateDialogueDisplay(); }
-});
-toggleBtn.addEventListener('click', ()=>{
-  isUserLineVisible=!isUserLineVisible;
-  userLineEl.style.display = isUserLineVisible ? 'block' : 'none';
-  toggleBtn.textContent = isUserLineVisible ? '🙉 Ẩn Lời Thoại' : '🙈 Hiện Lời Thoại';
-});
-restartSessionBtn.addEventListener('click', startPractice);
-chooseNewBtn.addEventListener('click', ()=>{
-  reviewArea.style.display='none';
-  document.getElementById('initial-setup').style.display='block';
-  practiceArea.style.display='none';
-  statusArea.textContent='';
-  statusArea.className='status neutral';
-  score=100; updateScore();
-});
-
-/* =====================
-   TẢI DANH SÁCH HỘI THOẠI TỪ GITHUB (giữ nguyên tính năng)
-   ===================== */
-const owner='truongkhaai136-dot', repo='webtiengduc', baseFolderPath='hoi-thoai';
-const conversationContainer = document.getElementById('danh-sach-hoi-thoai');
-let fileList=[];
-
-async function fetchAllFiles(path){
-  const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-  try{
-    const res = await fetch(apiUrl);
-    if(!res.ok) throw new Error('Lỗi mạng');
-    const items = await res.json();
-    const promises = items.map(async item=>{
-      if(item.type==='dir') await fetchAllFiles(item.path);
-      else if(item.type==='file' && item.name.endsWith('.txt')){
-        fileList.push({ path:item.path, download_url:item.download_url });
-      }
+  if(!translatePopup || translatePopup.closed){ alert("Popup đã đóng, hãy nhấn F5 để mở lại."); return; }
+  const popupHtml = `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Google Dịch</title></head><body>
+  <h3>Google Dịch — Nhận Transcript</h3>
+  <p>1) Nhấn <a target="_blank" href="https://translate.google.com/?sl=de&tl=vi&op=translate">Mở Google Dịch</a> và nói bằng tiếng Đức.</p>
+  <p>2) Sao chép văn bản tiếng Đức (ô bên trái).</p>
+  <p>3) Quay lại đây và bấm nút.</p>
+  <button id="pasteSendBtn">📋 Lấy từ Clipboard & Gửi</button>
+  <script>
+    const openerOrigin="*";
+    document.getElementById('pasteSendBtn').addEventListener('click',async()=>{
+      try{
+        const text=await navigator.clipboard.readText();
+        if(!text.trim()){alert("Clipboard trống.");return;}
+        window.opener.postMessage({type:'GT_TRANSCRIPT',payload:text.trim()},openerOrigin);
+      }catch(e){alert("Lỗi clipboard: "+e.message);}
     });
-    await Promise.all(promises);
-  }catch(e){
-    conversationContainer.innerHTML = '<p style="color:red;">Lỗi: Không thể tải danh sách hội thoại từ GitHub.</p>';
-  }
+  </scr`+`ipt></body></html>`;
+  translatePopup.document.open(); translatePopup.document.write(popupHtml); translatePopup.document.close();
 }
-function renderFileList(){
-  if(!conversationContainer) return;
-  conversationContainer.innerHTML = '<h2>Chọn một hội thoại để bắt đầu:</h2>';
-  fileList.sort((a,b)=>a.path.localeCompare(b.path));
-  fileList.forEach(file=>{
-    const btn = document.createElement('button');
-    const prettyName = file.path.replace(baseFolderPath+'/','').replace('.txt','').replace(/\//g,' / ').replace(/_/g,' ').replace(/-/g,' ');
-    btn.textContent = prettyName;
-    btn.title = 'Tải hội thoại: ' + prettyName;
-    btn.className='file-button';
-    btn.addEventListener('click', ()=>{
-      document.querySelectorAll('.file-button').forEach(b=>b.disabled=true);
-      btn.textContent='Đang tải...';
-      fetch(file.download_url).then(r=>r.text()).then(content=>{
-        dialogueInput.value = content;
-        btn.textContent='Đã tải!'; btn.style.background='#198754';
-        setTimeout(()=>{
-          document.querySelectorAll('.file-button').forEach(b=>{ b.disabled=false; b.style.background=''; b.textContent = b.textContent.includes('Đã tải!')? prettyName : b.textContent; });
-        }, 1200);
-      }).catch(_e=>{
-        btn.textContent='Tải lỗi!'; btn.style.background='#dc3545';
-      });
-    });
-    conversationContainer.appendChild(btn);
-  });
-}
-if(conversationContainer){
-  fetchAllFiles(baseFolderPath).then(renderFileList);
-}
+window.addEventListener('message',ev=>{
+  const {type,payload}=ev.data||{};
+  if(type==='GT_TRANSCRIPT'){ processSpokenText(String(payload||'')); }
+});
+
+// So sánh
+function lcs(a,b){const m=a.length,n=b.length;const dp=Array.from({length:m+1},()=>Array(n+1).fill(0));for(let i=1;i<=m;i++){for(let j=1;j<=n;j++){dp[i][j]=a[i-1]===b[j-1]?dp[i-1][j-1]+1:Math.max(dp[i-1][j],dp[i][j-1]);}}let i=m,j=n,res=[];while(i>0&&j>0){if(a[i-1]===b[j-1]){res.unshift(a[i-1]);i--;j--;}else if(dp[i-1][j]>dp[i][j-1])i--;else j--;}return res;}
+function createDiffHtml(originalText,spokenText){const clean=t=>t.toLowerCase().replace(/[^\w\s'äöüß]/g,'').split(/\s+/).filter(Boolean);const original=clean(originalText),spoken=clean(spokenText);const common=new Set(lcs(original,spoken));let correct=0;const spokenHtml=spoken.map(w=>{if(common.has(w)){correct++;return '<b>'+w+'</b>';}return '<span style="color:red">'+w+'</span>';}).join(' ');const originalHtml=original.map(w=>common.has(w)?w:'<i>'+w+'</i>').join(' ');const accuracy=original.length?Math.round((correct/original.length)*100):0;return {html:`<div><b>Câu gốc:</b> ${originalHtml}</div><div><b>Bạn nói:</b> ${spokenHtml}</div>`,accuracy};}
+
+// Luồng chính
+function updateScore(){scoreArea.textContent='Điểm: '+score;}
+function updateDialogueDisplay(){const computerRole=userIsB?'A':'B';const userRole=userIsB?'B':'A';const computerText=userIsB?linesA[currentLineIndex]:linesB[currentLineIndex];const userText=userIsB?linesB[currentLineIndex]:linesA[currentLineIndex];document.getElementById('computer-line').textContent=`${computerRole} (Máy): ${computerText||'...'}`;userLineEl.textContent=userText||'...';userLineTitle.textContent=`Câu của bạn (${userRole}):`;userLineEl.style.display=isUserLineVisible?'block':'none';toggleBtn.textContent=isUserLineVisible?'Ẩn':'Hiện';}
+function startPractice(){currentLineIndex=0;score=100;updateScore();document.getElementById('initial-setup').style.display='none';document.getElementById('practice-area').style.display='block';ensurePopup();updateDialogueDisplay();statusArea.textContent='Máy đang nói...';const next=userIsB?linesA[0]:linesB[0];if(next){speak(next,()=>handleNextTurn());}else{handleNextTurn();}}
+function handleNextTurn(){const userText=userIsB?linesB[currentLineIndex]:linesA[currentLineIndex];if(userText){statusArea.textContent='Đến lượt bạn. Hãy dùng popup Google Dịch.';openTranslatePopup();}else{currentLineIndex++;if(currentLineIndex>=Math.max(linesA.length,linesB.length)){showReview();return;}const next=userIsB?linesA[currentLineIndex]:linesB[currentLineIndex];if(next){speak(next,()=>handleNextTurn());}else{showReview();}}}
+function processSpokenText(spokenText){const targetText=userIsB?(linesB[currentLineIndex]||''):(linesA[currentLineIndex]||'');const {html,accuracy}=createDiffHtml(targetText,spokenText);if(accuracy>=90){statusArea.className='status success';statusArea.innerHTML='Tốt lắm! '+accuracy+'%';currentLineIndex++;if(currentLineIndex>=Math.max(linesA.length,linesB.length)){showReview();return;}updateDialogueDisplay();const next=userIsB?linesA[currentLineIndex]:linesB[currentLineIndex];if(next){speak(next,()=>handleNextTurn());}else{handleNextTurn();}}else{statusArea.className='status error';score=Math.max(0,score-5);updateScore();statusArea.innerHTML='Chưa đạt ('+accuracy+'%). Thử lại.<br>'+html;openTranslatePopup();}}
+function showReview(){document.getElementById('practice-area').style.display='none';document.getElementById('review-area').style.display='block';statusArea.textContent='Kết thúc. Điểm: '+score;}
+
+// Nút điều khiển
+document.getElementById('load-btn').addEventListener('click',()=>{const full=(document.getElementById('dialogue-input').value||'').trim();if(!full){alert('Nhập hội thoại!');return;}const lines=full.split('\n').filter(x=>x.trim()!=='');linesA=[];linesB=[];lines.forEach(l=>{if(/^a:/i.test(l))linesA.push(l.slice(2).trim());else if(/^b:/i.test(l))linesB.push(l.slice(2).trim());});startPractice();});
+document.getElementById('swap-roles-btn').addEventListener('click',()=>{userIsB=!userIsB;});
+document.getElementById('toggle-line-btn').addEventListener('click',()=>{isUserLineVisible=!isUserLineVisible;updateDialogueDisplay();});
 </script>
 </body>
 </html>
